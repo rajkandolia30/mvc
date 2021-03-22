@@ -1,0 +1,58 @@
+
+Following structure to be followed for Frontend Panel.
+
+1. Controller/ - All controllers related to admin panel will be here
+2. Block/ - All blocks related to admin panel display will be here
+3. Helper/ - All helpers related to admin panel will be here (not yet introduced)
+4. View/ - All views files will be here related to admin panel.
+5. skin/ - 
+
+1.  Product table->  Brand, Collection, Color, Product Type, Type Group, Material, Style
+
+trait
+edit has edit trait
+folder name -> trait file hving foldername
+create all files like admin for customer						
+
+daily shop templtae
+root pe media ka folder 
+
+
+Home Page
+	- banner
+	-featured category
+	-Most View Product
+	-Most Deal Product
+	-Brand icon
+
+Show 5 Banner slider :
+media/banner/
+
+Show 5  Featured category : 
+featured (yes/No)
+Images will be displayed.
+
+Show 5 Deal Product : 
+deal_item attribute (Yes/No)
+
+Show 5 Most Popular  Items : 
+most_popular attribute (Yes/No)
+
+Brand Slider with Next Prev link
+make module and upload image : media/brand/
+
+Header : 
+
+left : logo
+right : login/ register link
+footer : show the category menux
+controller-core-pager class all setter getter
+remove fetch row variable
+protected setEnd setStart setNoofpage setprevious setnext 
+
+
+category
+attribute tab
+remove delete
+linking useing admin and customer
+customer panel
