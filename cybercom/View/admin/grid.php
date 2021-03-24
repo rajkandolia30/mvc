@@ -11,7 +11,7 @@ $title = $this->getTitle();
     <hr>
 </div>
 
-<table class="table">
+<table class="table table-bordered table-sm">
     <tr>
         <?php if($columns): ?>
             <?php foreach($columns as $key => $column): ?>
@@ -21,6 +21,16 @@ $title = $this->getTitle();
             <?php endforeach; ?>
         <?php endif; ?>
         <th colspan="2">Actions</th>
+    </tr>
+
+    <tr>
+        <?php if($columns): ?>
+            <?php foreach($columns as $key => $column): ?>
+                <td>
+                    <input type="text" name="filter[<?php echo $column['type'];?>][<?php echo $column['field'];?>]">
+                </td>
+            <?php endforeach; ?>
+        <?php endif; ?>
     </tr>
 
     <?php if($collection): ?>

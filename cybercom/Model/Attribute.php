@@ -15,4 +15,14 @@ class Attribute extends \Model\Core\Table{
             "Disable" => "Disable"
         ];
     }
+
+    public function getOptions(){
+    	echo 1;
+    	$this->setTableName('attributeOption');
+    	if(!$this->attributeId){
+    		return false;
+    	}
+		$model = \Mage::getModel($this->backendModel)->setAttribute($this)->getOptions();
+    	return $model;
+    }
  } ?>

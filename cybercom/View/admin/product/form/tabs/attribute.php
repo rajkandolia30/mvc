@@ -12,7 +12,7 @@ $options = $this->getOptions();
        	
         <tr>
 
-	        <?php foreach($attribute->data as $key => $attibute): ?>
+	        <?php foreach($attribute->data as $key => $attribute): ?>
        				<td><?php echo $attribute->Name; ?></td>
             
             <?php if($attribute->inputType == 'textarea'): ?>
@@ -25,15 +25,21 @@ $options = $this->getOptions();
             <?php endif; ?>
 
             <?php if($attribute->inputType == 'select'): ?>
-              <td><select>
-                    <?php if($options): ?>
-                        <option>no options</option>
-                    <?php else: ?>
-                      <option value="<?php echo $option->name ?>"><?php echo $option->name; ?></option>
-                        </select></td>
-                    <?php endif; ?>
+                <td>
+                    <select>
+                        <?php if(!$options): ?>
+                            <option>no options</option>
+                        <?php else: ?>
+                            <option value="">Select Option</option>
+                            <?php foreach($option->data as $key => $option): ?>
+                                <option value="<?php echo $option->name ?>"><?php echo $option->name; ?></option>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </select>
+                </td>
+            <?php endif; ?>
 
-            <?php if($attibute->inputType == 'checkbox'): ?>
+            <?php if($attribute->inputType == 'checkbox'): ?>
                 <?php if(!$options): ?>
                     <td>no options</td>
                 <?php else: ?>

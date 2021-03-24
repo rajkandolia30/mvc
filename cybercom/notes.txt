@@ -56,3 +56,20 @@ attribute tab
 remove delete
 linking useing admin and customer
 customer panel
+
+
+attributes that need to shown on layer navigation
+
+Color
+Brand
+Product Type
+Material
+Style
+Rating
+
+jo attribute set kiya usko options k function me get krenege 
+or brand ko extend krenge attibute_option 
+do brand option
+set get attribute in attibute model and also getoptions
+
+model\core\table\collection

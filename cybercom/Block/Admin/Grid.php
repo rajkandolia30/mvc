@@ -102,4 +102,9 @@ class Grid extends \Block\Core\Template{
   		return "object.setUrl('{$url}').resetParams().load()";
   	}
 
+    public function getFilterUrl(){
+      $url = $this->getUrl()->getUrl('filter');
+      return "object.setUrl('{$url}').resetParams().load()";
+    }
+
  }?>

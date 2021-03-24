@@ -82,7 +82,7 @@ class Pager{
         return $this->currentPage;
     }
 
-    public function calculate(){
+    public function calculatePage(){
         if($this->getTotalRecords() <= $this->getRecordPerPage()){
             $this->setNoOfPages(1);
             $this->setEnd(null);

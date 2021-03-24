@@ -10,7 +10,7 @@ class Layout extends \Block\Core\Template{
     
     public function prepareChildren(){
         $this->addChild(\Mage::getBlock('Block\dashboard\Layout\Content'), 'content');
-	$this->addChild(\Mage::getBlock('Block\Admin\Layout\Menu'),'menu');
+	    $this->addChild(\Mage::getBlock('Block\Admin\Layout\Menu'),'menu');
         $this->addChild(\Mage::getBlock('Block\dashboard\Layout\Header'),'header');
         $this->addChild(\Mage::getBlock('Block\dashboard\Layout\Footer'),'footer');
         $this->addChild(\Mage::getBlock('Block\dashboard\Layout\Left'),'left');

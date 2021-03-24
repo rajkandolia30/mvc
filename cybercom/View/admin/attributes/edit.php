@@ -4,7 +4,7 @@ $input = $this->getInputTypeOption();
 $backend = $this->getBackendTypeOption();
 ?>
 <h1>Attribute</h1>
-	<form action="<?php echo $this->getUrl()->getUrl('save','attribute'); ?>" method="post" id="attributeForm">
+	<form action="<?php echo $this->getUrl()->getUrl('save','Admin\attribute'); ?>" method="post" id="attributeForm">
 		<table>
 			<tr>
 				<td>Name</td>

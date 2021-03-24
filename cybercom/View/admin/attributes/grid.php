@@ -1,4 +1,5 @@
 <?php $attributes = $this->getAttributes();
+// print_r($attributes);
 ?>
 <h1>Attribute</h1>
 <div style="padding: 10px">

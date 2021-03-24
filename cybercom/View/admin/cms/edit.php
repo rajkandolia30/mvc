@@ -26,9 +26,9 @@ $arrayOfStatus = $this->getStatusOption();
 
         <tr>
             <td>Content</td>
-            <td><textarea name="cms[content]"><?php echo $cms->content;?></textarea>
+            <td><textarea name="cms[content]" id="cms"><?php echo $cms->content;?></textarea>
                 <script>
-                    CKEDITOR.replace( 'cms[content]' );
+                    CKEDITOR.replace('cms[content]');
                 </script>
             </td>
         </tr>
