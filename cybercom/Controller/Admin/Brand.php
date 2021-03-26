@@ -1,40 +1,41 @@
-<?php
+<?php 
 namespace Controller\Admin;
-\Mage::loadFileByClassName('Controller\Core\Admin');
-class Product extends \Controller\Core\Admin{
-    protected $products = [];
-    protected $product = null;
+class Brand extends \Controller\Core\Admin {
     protected $model = null;
-    
+
+    public function indexAction(){
+        $layout = \Mage::getBlock('Block\Admin\Layout');
+        $content = $layout->getChild('content');
+        $dashBoard = \Mage::getBlock('Block\Admin\Admin\Grid');
+        $content->addChild($dashBoard,'dashBoard');
+        echo $layout->toHtml();   
+    }
+
     public function setModel(){
-        try {
-            $this->model = \Mage::getModel('Model\product');
-            return $this;  
-        } catch (Exception $e) {
+        try{
+            $this->model = \Mage::getModel('Model\Admin');
+            return $this;
+        }catch (Exception $e){
             echo $e->getMessage();
         }
     }
-
+    
     public function getModel(){
-        try {
+        try{
             if(!$this->model){
                 $this->setModel();
             }
             return $this->model;
-        } catch (Exception $e) {
+        } catch (Exception $e){
             echo $e->getMessage();
         }
-    }  
+    }
 
     public function gridAction(){
         try {
-            $grid = \Mage::getBlock('Block\Admin\Product\Grid')->toHtml();
-            $response =  [
+            $grid = \Mage::getBlock('Block\Admin\Admin\Grid')->toHtml();
+            $response = [
                 'element' => [
-                    [
-                        'selector' => '#tab',
-                        'html' => null,
-                    ],
                     [
                         'selector' => '#contentHtml',
                         'html' => $grid,
@@ -42,31 +43,21 @@ class Product extends \Controller\Core\Admin{
                 ]                
             ];
             header("Content-type: application/json; charset=utf-8");
-            echo json_encode($response);
+            echo json_encode($response); 
         } catch (Exception $e) {
             echo $e->getMessage();
-        }         
+        }     
     }
 
     public function formAction(){
         try{    
-            $product = \Mage::getModel('Model\Product');
-            $id = $this->getRequest()->getGet('id');
-            $product->load($id);
-            $form = \Mage::getBlock('Block\Admin\Product\Edit');
-            $form->setTableRow($product);
-            $tabs =  \Mage::getBlock('Block\Admin\Product\Edit\Tabs');
-            $form = $form->toHtml();
+            $form = \Mage::getBlock('Block\Admin\Admin\Edit')->toHtml();
             $response = [
                 'element' =>
                     [
                         [
                             'selector' => '#contentHtml',
                             'html' => $form,                    
-                        ],
-                        [
-                            'selector' => '#tab',
-                            'html' => $tabs
                         ]
                     ]
             ];
@@ -82,30 +73,25 @@ class Product extends \Controller\Core\Admin{
             if(!$this->getRequest()->isPost()){
                 throw new Exception("Invalid request");
             }
-            $products =  $this->getRequest()->getPost('product');
+            $admins =  $this->getRequest()->getPost('admin');
             $id =  $this->getRequest()->getGet('id');
             if($id){
-                $this->getModel()->updatedAt = date("Y-m-d");
-                $this->getModel()->productId = $id;
+                $this->getModel()->adminId = $id;
                 $this->getMessage()->setSuccess('Record updated successfully');
             } else {
-                $this->getModel()->createdAt = date("Y-m-d");
+                $this->getModel()->createdDate = date('Y-m-d');
                 $this->getMessage()->setSuccess('Record inserted successfully');
             }
-            $this->getModel()->setData($products); 
-            $this->getModel()->save();            
+            $this->getModel()->setData($admins); 
+            $this->getModel()->save();
 
-            $grid = \Mage::getBlock('Block\Admin\Product\Grid')->toHtml();
+            $grid = \Mage::getBlock('Block\Admin\Admin\Grid')->toHtml();
             $response = [
                 'element' => [
-                        [
-                            'selector' => '#contentHtml',
-                            'html' => $grid,                    
-                        ],
-                        [
-                            'selector' => null,
-                            'html' => null
-                        ]
+                    [
+                        'selector' => '#contentHtml',
+                        'html' => $grid,
+                    ]
                 ]                
             ];
             header("Content-type: application/json; charset=utf-8");
@@ -124,22 +110,19 @@ class Product extends \Controller\Core\Admin{
             $delete = $this->getModel()->delete($id);
             if(!$delete){
                 $this->getMessage()->setFailure('Enable to delete record!!');
-            } else {                
+            } else {
                 $this->getMessage()->setSuccess('Record deleted successfully!!!');
             }
-
-            $grid = \Mage::getBlock('Block\Admin\Product\Grid')->toHtml();
+            
+            $grid = \Mage::getBlock('Block\Admin\Admin\Grid')->toHtml();
             $response = [
                 'element' => [
-                    [
-                        'selector' => '#tab',
-                        'html' => null,
-                    ],
                     [
                         'selector' => '#contentHtml',
                         'html' => $grid,
                     ]
-                ]                
+                ]
+                
             ];
             header("Content-type: application/json; charset=utf-8");
             echo json_encode($response);
@@ -147,4 +130,5 @@ class Product extends \Controller\Core\Admin{
             $this->getMessage()->setFailure($e->getMessage());
         }
     }
-}?>
+}
+ ?>

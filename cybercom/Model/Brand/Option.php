@@ -1,7 +1,7 @@
 <?php 
 namespace Model\Brand;
-\Mage::loadFileByClassName('');
-class Option extends \Model\Attirbute\Option{
+\Mage::loadFileByClassName('Model\Attribute\Option');
+class Option extends \Model\Attribute\Option{
 	
 	public function __construct(){
 		$this->setPrimaryKey('brandId');
@@ -9,14 +9,13 @@ class Option extends \Model\Attirbute\Option{
 	}
 
 	public function getOptions(){
-		echo 3;
-		if(!$this->getAttribute()->attributeId){
+		if(!$this->getAttribute()->data['attributeId']){
 			return false;
 		}
 		$query = "SELECT 
 			brandId as optionId,
 			name as name,
-			'{$this->getAttribute()->attributeId}' as attributeId,
+			'{$this->getAttribute()->data['attributeId']}' as attributeId,
 			sortOrder
 		FROM `brand`
 		ORDER BY `sortOrder` ASC";

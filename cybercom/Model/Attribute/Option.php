@@ -22,7 +22,7 @@ class Option extends \Model\Core\Table{
  	}
 
  	public function getAttribute(){
- 		if(!$attribute){
+ 		if(!$this->attribute){
  			$this->setAttribute();
  		}
  		return $this->attribute;
@@ -33,14 +33,15 @@ class Option extends \Model\Core\Table{
  		return $this;
  	}
 
- 	public function getOptions(){
- 		echo 2;
- 		if(!$this->getAttribute()->attributeId){
+ 	public function getOptions(){		
+ 		if(!$this->getAttribute()->data['attributeId']){
  			return null;
  		}
  		$query = "SELECT * FROM `attributeOption`
- 		WHERE `attributeId` = '{$this->getAttribute()->attributeId}'
+ 		WHERE `attributeId` = '{$this->getAttribute()->data['attributeId']}'
  		ORDER BY `sortOrder` ASC";
- 		return $this->fetchAll($query);
+ 		$row = $this->fetchAll($query);
+ 		return $row;
  	}
+ 		
 }?>

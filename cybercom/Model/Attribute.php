@@ -17,9 +17,9 @@ class Attribute extends \Model\Core\Table{
     }
 
     public function getOptions(){
-    	echo 1;
     	$this->setTableName('attributeOption');
-    	if(!$this->attributeId){
+        $id = $this->data['attributeId'];
+    	if(!$id){
     		return false;
     	}
 		$model = \Mage::getModel($this->backendModel)->setAttribute($this)->getOptions();

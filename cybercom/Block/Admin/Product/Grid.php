@@ -56,6 +56,10 @@ class Grid extends \Block\Admin\Grid{
             'label' => 'Delete',
             'method' => 'getDeleteUrl'
         ]);
+        $this->addAction('addToCart',[
+            'label' => 'Add to Cart',
+            'method' => 'getAddToCartUrl'
+        ]);
         return $this;
     }
 
@@ -66,6 +70,11 @@ class Grid extends \Block\Admin\Grid{
 
     public function getDeleteUrl($row){
         $url = $this->getUrl()->getUrl('delete',null,['id' => $row->productId]);
+        return "object.setUrl('{$url}').resetParams().load()";
+    }
+
+    public function getAddToCartUrl($row){
+        $url = $this->getUrl()->getUrl('addToCart','Admin\Cart',['id' => $row->productId]);
         return "object.setUrl('{$url}').resetParams().load()";
     }
     

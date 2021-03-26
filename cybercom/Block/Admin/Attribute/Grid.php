@@ -2,8 +2,8 @@
 namespace Block\Admin\Attribute;
 \Mage::loadFileByClassName('Block\Admin\Grid');
 class Grid extends \Block\Admin\Grid{
- 	protected $attributes = [];
-
+ 	protected $attribute = [];
+    protected $filter = null;
  	public function __construct(){
  		parent::__construct();
  		//$this->setTemplate('./View/admin/attributes/grid.php');	
@@ -34,12 +34,40 @@ class Grid extends \Block\Admin\Grid{
  		return $this;
  	}
 
+    public function prepareFilter(){
+        $attribute = \Mage::getModel('Model\Attribute');
+        $query = "SELECT * FROM {$attribute->getTableName()}";
+
+        print_r($this->getFilter()->hasFilter());
+        if($this->getFilter()->hasFilter()){
+            $query.= "WHERE";
+            foreach ($this->getFilter()->getFilters() as $type => $filters) {
+                if($type == 'text'){
+                    foreach ($filters as $key => $value) {
+                        $query.="`{$key}` LIKE '%{$value}%'";
+                    }
+                }
+            } 
+        }
+
+        $attribute = $attribute->fetchAll($query);
+        $this->setCollection($attribute);
+        return $this;
+    }
+
  	public function getCollection(){
  		if(!$this->collection){
  			$this->setCollection();
  		}
- 		return $this->collection;
+ 		return $this->collection;        
  	}
+
+    public function getFilter(){
+        if(!$this->filter){
+            $this->filter = \Mage::getModel('Model\Filter');
+        }
+        return $this->filter;
+    }
 
  	public function prepareColumns(){
         $this->addColumn('attributeId',[
@@ -116,5 +144,9 @@ class Grid extends \Block\Admin\Grid{
             'method' => 'getFilterUrl'
         ]);
         return $this;
+    }
+
+    public function getFilterUrl(){
+      return "object.setForm('#gridForm').load()";
     }
  } ?>

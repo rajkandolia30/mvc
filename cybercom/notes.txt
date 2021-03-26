@@ -1,12 +1,4 @@
 
-Following structure to be followed for Frontend Panel.
-
-1. Controller/ - All controllers related to admin panel will be here
-2. Block/ - All blocks related to admin panel display will be here
-3. Helper/ - All helpers related to admin panel will be here (not yet introduced)
-4. View/ - All views files will be here related to admin panel.
-5. skin/ - 
-
 1.  Product table->  Brand, Collection, Color, Product Type, Type Group, Material, Style
 
 trait
@@ -73,3 +65,97 @@ do brand option
 set get attribute in attibute model and also getoptions
 
 model\core\table\collection
+
+
+cart Table ==
+ cart Id				=>usedin cartItem table and 
+ sessionId				
+ cartAddressTable
+ customer Id 				=>foreignkey->customerTable
+ Total
+ discount
+ payment Method Id 			=>foreignkey->paymentTable
+ shipping Method Id 		=>foreignKey->shippingTable
+ shippingAmount
+ created Date
+ 
+cart Item table== 
+ cartitem Id	
+ cart Id 					=> foreignkey->cartTable
+ product Id 				=> foerignKey->productTable
+ quantity 
+ base price
+ price
+ discount
+ created Date
+ 
+
+Cart Address table== 
+ cart address Id 
+ cart Id				=>foreignKey->cartTable
+ address Id 			=>foreignKey->customerAddress
+ address Type			=>foreignKey->customerAddress (left)
+ city
+ state
+ country
+ zip
+ same as billing
+
+
+ add a button on product grid set its url 
+
+ cartitem dikhani he
+ make delete action
+
+
+ name of pweson in billing and shipping table
+
+ base total in cart table
+ cart hase cart discount 
+ item has item discount
+
+
+ if cart billing address == yes
+	return it
+else
+	if customer has billing address == yes
+		create cart billing address from customer billing address
+		return cart billing address
+	else
+		return cart billing address blank row 
+	endif
+endif
+
+
+
+save level login
+
+if cart has billing address
+	update data into billing address
+else 
+	create billing address in cart
+endif
+
+if flag in address book for billing
+	if cart customer billing address available == yes
+		update cart billing address to customer billing address
+	else 
+		create customer billing address bases on cart billing address
+	endif
+endif
+
+if cart has same as billing == yes
+	if cart shipping address available == yes
+		update cart shipping address with cart billing address
+	else
+		create cart shipping address with cart billing address
+	endif
+endif
+
+if flag in address book for shipping
+	if cart customer shipping address available == yes
+		update cart shipping address to customer shipping address
+	else
+		create customer shipping address bases on cart shipping address
+	endif
+endif

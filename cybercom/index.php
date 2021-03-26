@@ -1,4 +1,5 @@
 <?php
+spl_autoload_register(__NAMESPACE__.'\Mage::loadFileByClassName');
 \Mage::loadFileByClassName('Controller\Core\Front');
 class Mage{
     public static function init(){
@@ -13,12 +14,12 @@ class Mage{
 	}
 
 	public static function getBlock($className){
-        self::loadFileByClassName($className);
+        //self::loadFileByClassName($className);
 		return new $className();
 	}
 
     public static function getModel($className){
-        self::loadFileByClassName($className);
+        //self::loadFileByClassName($className);
         return new $className();
     }
 

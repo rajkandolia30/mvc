@@ -1,6 +1,6 @@
 <?php 
 namespace Model\Product\GroupPrice;
-class Collection{
+class Collection extends \Model\Core\Table\Collection{
 	public $data = [];
 
 	public function setData($data = []){

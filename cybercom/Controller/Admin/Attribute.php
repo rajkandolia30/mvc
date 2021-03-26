@@ -134,12 +134,11 @@ class Attribute extends \Controller\Core\Admin {
     }
 
     public function filterAction(){
-        echo 11;
-        $filter = $this->getRequest()->getPost('filter');
-        print_r($filter);
-        die();
-        /*$filterModel = \Mage::getModel('Model\Admin\Filter');
-        $filterModel->setFilter($filter);*/
+        $filters = $this->getRequest()->getPost('filter');
+        $filterModel = \Mage::getModel('Model\Filter');
+        $filterModel->setFilters($filters);
+       /* echo '<pre>';
+        print_r($filterModel);*/
         die();
         $grid = \Mage::getBlock('Block\Admin\Attribute\Grid')->toHtml();
             $response = [
@@ -163,10 +162,10 @@ class Attribute extends \Controller\Core\Admin {
         echo '<pre>';
         $query = "SELECT * FROM `attribute` WHERE `entityTypeId` = 'product'";
         $attributes = \Mage::getModel("Model\Attribute")->fetchAll($query);
-        // print_r($attribute->data);
-        foreach($attributes->data as $key => $attribute){
-            print_r($attribute->getOptions());
+        foreach($attributes->getData() as $key => $attribute){
+            print_r($attribute->getOptions()); 
         }
+        die();
 
     }
 }?>
