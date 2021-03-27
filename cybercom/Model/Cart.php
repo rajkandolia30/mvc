@@ -30,7 +30,7 @@ class Cart extends \Model\Core\Table{
 		return $this->customer;
 	}
 
-	public function setItems(\Model\Cart\Items\Collection $items){
+	public function setItems(\Model\Cart\Item\Collection $items = null){
 		$this->items = $items;
 		return $this;
 	}
@@ -39,7 +39,7 @@ class Cart extends \Model\Core\Table{
 		if(!$this->cartId) {
             return false;
         }
-        $query = "SELECT * FROM `cartItem` WHERE `cartId` = '{$this->cartId}';";
+        $query = "SELECT * FROM `cartItem` WHERE `cartId` = '{$this->cartId}'";
         $items = \Mage::getModel('Model\Cart\Item')->fetchAll($query);
         $this->setItems($items);
         return $this->items;

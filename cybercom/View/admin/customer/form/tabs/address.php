@@ -1,9 +1,7 @@
 <?php
 $customerAddress = $this->getCustomerAddress();
-
 $customerBilling = $customerAddress->data[0];
 $customerShipping = $customerAddress->data[1];
-
 ?>
 <form method="post" action="<?php echo $this->getUrl()->getUrl('saveAddress','Admin\Customer') ?>" id="addressForm">
 	<table class="table">

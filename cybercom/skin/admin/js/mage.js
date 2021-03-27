@@ -77,6 +77,7 @@ Base.prototype = {
 		this.setUrl(form.attr('action'));
 		this.setParams(form.serialize());
 		console.log(form.attr('action'));
+		console.log(form.serialize());
 		return this;
 	},
 	upload : function(){

@@ -18,10 +18,8 @@ class Grid extends \Block\Core\Template{
 		}
 		return $this->cart;
 	}
-	/*public function getCustomer(){
-		$customer = \Mage::getModel('Model\Customer');
-		$query = "SELECT * FROM `{$customer->getTableName()}`";
-		$customer = $customer->fetchAll($query);
-		return $customer;
-	}*/
+
+	public function getCustomer(){
+		return $customer = \Mage::getModel('Model\Customer')->fetchAll();
+	}
 }?>
