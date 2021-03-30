@@ -1,17 +1,21 @@
-<?php $cartItem = $this->getCart()->getItems()->getData();?>
+<?php $cart = $this->getCart(); ?>
+<?php $cartItem = $cart->getItems()->data;?>
 <?php $customers = $this->getCustomer()->getData(); ?>
+
 <form action="<?php echo $this->getUrl()->getUrl('update','Admin\Cart') ?>" method="post" id="cartForm">
 	<!-- select customer -->
 	<div style="padding:10px;">
 		Customer:
 		<select name="customer">
-			<option>SELECT CUSTOMER</option>
-			<?php foreach($customers as $key => $customer): ?>
-				<option value="<?php echo $customer->customerId; ?>"><?php echo $customer->firstName; ?></option>
-			<?php endforeach; ?>
+			<?php if($customers): ?>
+				<option>SELECT CUSTOMER</option>
+				<?php foreach($customers as $key => $customer): ?>
+					<option value="<?php echo $customer->customerId; ?>" <?php if($customer->customerId && $cart->cartId){echo "selected";} ?>><?php echo $customer->firstName; ?></option>
+				<?php endforeach; ?>
+			<?php endif; ?>
 		</select>
 		<!-- <button type="button" class="btn btn-primary" onclick="object.setUrl('<?php //echo $this->getUrl()->getUrl('selectCustomer','Admin\Cart'); ?>').resetParams().setForm('#cartForm').load()">Go</button> -->
-		<button type="button" onclick="selectCustomer();">GO</button>
+		<button type="button" class="btn btn-primary" onclick="selectCustomer();">GO</button>
 	</div>
 
 	<!-- Buttons -->
@@ -86,7 +90,8 @@
 				</tr>
 
 				<tr>
-					<td colspan="2"><button type="button" class="btn btn-success">Save</button></td>
+					<td><input type="checkbox" name="saveInAddressBook">Save in address book</td>
+					<td><button type="button" class="btn btn-success">Save</button></td>
 				</tr>
 			</table>
 		</div>
@@ -123,8 +128,10 @@
 				</tr>
 
 				<tr>
+					<td><input type="checkbox">Same as billing<br>
+						<input type="checkbox" name="saveInAddressBook">Save in address book
+					</td>
 					<td><button type="button" class="btn btn-success">Save</button></td>
-					<td><input type="checkbox">Same as billing</td>
 				</tr>
 			</table>
 		</div>

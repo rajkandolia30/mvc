@@ -115,7 +115,11 @@ Cart Address table==
  item has item discount
 
 
- if cart billing address == yes
+
+
+
+show level logic
+if cart billing address == yes
 	return it
 else
 	if customer has billing address == yes

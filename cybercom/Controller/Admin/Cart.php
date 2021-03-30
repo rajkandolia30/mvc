@@ -26,8 +26,7 @@ class Cart extends \Controller\Core\Admin{
 			$productId = $this->getRequest()->getGet('id');
 			$product = \Mage::getModel('Model\product')->load($productId);
 			if(!$product){
-				throw new \Exception("No Product found");
-				
+				throw new \Exception("No Product found");			
 			}
 			$cart = $this->getCart();
 			$cart->addItemToCart($product, 1, true);	
@@ -50,9 +49,24 @@ class Cart extends \Controller\Core\Admin{
         echo json_encode($response);
 	}
 
-	public function getCart(){
+	public function getCart($customerId = null){
 		try {
-			$sessionId = \Mage::getModel('Model\Admin\Session')->getId();
+			$session = \Mage::getModel('Model\Admin\Session');
+			if($customerId){
+				$session->customerId = $customerId;
+			}
+			$cart = \Mage::getModel('Model\Cart');
+			$query = "SELECT * FROM `cart` WHERE `customerId` = '{$session->customerId}'";
+			$cart = $cart->fetchRow($query);
+			if($cart){
+				return $cart;
+			}
+			$cart = \Mage::getModel('Model\Cart');
+			$cart->customerId = $session->customerId;
+			$cart->createdDate = date('y-m-d H:i:s');
+			$cart->save();
+			return $cart;
+			/*$sessionId = \Mage::getModel('Model\Admin\Session')->getId();
 			$cart = \Mage::getModel('Model\Cart');
 			$query = "SELECT * FROM `{$cart->getTableName()}` WHERE sessionId = '{$sessionId}'";
 			$cart = $cart->fetchRow($query);
@@ -63,7 +77,7 @@ class Cart extends \Controller\Core\Admin{
 			$cart->sessionId = $sessionId;
 			$cart->createdDate = date("y-m-d H:i:s");
 			$cart->save();
-			return $cart;	
+			return $cart;*/
 		} catch (\Exception $e) {
 			$this->getMessage()->setFailure($e->getMessage());	
 		}
@@ -129,21 +143,20 @@ class Cart extends \Controller\Core\Admin{
 	}
 
 	public function selectCustomerAction(){
-		echo 'SELCETCUSTOMERACTION';
-		$customer = $this->getRequest()->getPost('customer');
-		// print_r($customer);
-		$this->getCart($customerId);
+		$customerId = $this->getRequest()->getPost('customer');
+		$cart = $this->getCart($customerId);
+
 		$grid = \Mage::getBlock('Block\Admin\Cart\Grid');
-            $grid = $grid->setCart($this->getCart())->toHtml();
-            $response = [
-                'element' => [
-                    [
-                        'selector' => '#contentHtml',
-                        'html' => $grid,
-                    ]
-                ]                
-            ];
-            header("Content-type: application/json; charset=utf-8");
-            echo json_encode($response); 
+        $grid = $grid->setCart($cart)->toHtml();
+        $response = [
+            'element' => [
+                [
+                    'selector' => '#contentHtml',
+                    'html' => $grid
+                ]
+            ]                
+        ];
+        header("Content-type: application/json; charset=utf-8");
+        echo json_encode($response); 
 	}
 } ?>

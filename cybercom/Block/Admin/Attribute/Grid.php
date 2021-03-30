@@ -38,18 +38,26 @@ class Grid extends \Block\Admin\Grid{
         $attribute = \Mage::getModel('Model\Attribute');
         $query = "SELECT * FROM {$attribute->getTableName()}";
 
-        print_r($this->getFilter()->hasFilter());
-        if($this->getFilter()->hasFilter()){
+        $filter = \Mage::getModel('Model\Filter');
+        print_r($filter->getFilters());
+        die();
+        /*if($this->getFilter()->hasFilter()){
             $query.= "WHERE";
             foreach ($this->getFilter()->getFilters() as $type => $filters) {
-                if($type == 'text'){
+                if($type == 'varchar'){
                     foreach ($filters as $key => $value) {
-                        $query.="`{$key}` LIKE '%{$value}%'";
+                        $query.="`{$key}` LIKE '%{$value}%' && ";
                     }
                 }
-            } 
-        }
-
+                if($type == 'number'){
+                    foreach ($filters as $key => $value) {
+                        $query.="`{$key}` LIKE '%{$value}%' && ";
+                    }
+                }
+            }
+            $query = substr($query,0,-4); 
+        }*/
+        echo $query;
         $attribute = $attribute->fetchAll($query);
         $this->setCollection($attribute);
         return $this;

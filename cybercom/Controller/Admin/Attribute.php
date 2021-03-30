@@ -137,35 +137,29 @@ class Attribute extends \Controller\Core\Admin {
         $filters = $this->getRequest()->getPost('filter');
         $filterModel = \Mage::getModel('Model\Filter');
         $filterModel->setFilters($filters);
-       /* echo '<pre>';
-        print_r($filterModel);*/
-        die();
         $grid = \Mage::getBlock('Block\Admin\Attribute\Grid')->toHtml();
-            $response = [
-                'element' => [
-                    [
-                        'selector' => '#tab',
-                        'html' => null,
-                    ],
-                    [
-                        'selector' => '#contentHtml',
-                        'html' => $grid,
-                    ]
+        $response = [
+            'element' => [
+                [
+                    'selector' => '#tab',
+                    'html' => null,
+                ],
+                [
+                    'selector' => '#contentHtml',
+                    'html' => $grid,
                 ]
-                
-            ];
-            header("Content-type: application/json; charset=utf-8");
-            echo json_encode($response);
+            ]
+            
+        ];
+        header("Content-type: application/json; charset=utf-8");
+        echo json_encode($response);
     }
 
     public function testAction(){
-        echo '<pre>';
         $query = "SELECT * FROM `attribute` WHERE `entityTypeId` = 'product'";
         $attributes = \Mage::getModel("Model\Attribute")->fetchAll($query);
         foreach($attributes->getData() as $key => $attribute){
             print_r($attribute->getOptions()); 
         }
-        die();
-
     }
 }?>

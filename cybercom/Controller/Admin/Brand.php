@@ -6,14 +6,14 @@ class Brand extends \Controller\Core\Admin {
     public function indexAction(){
         $layout = \Mage::getBlock('Block\Admin\Layout');
         $content = $layout->getChild('content');
-        $dashBoard = \Mage::getBlock('Block\Admin\Admin\Grid');
+        $dashBoard = \Mage::getBlock('Block\Admin\Brand\Grid');
         $content->addChild($dashBoard,'dashBoard');
         echo $layout->toHtml();   
     }
 
     public function setModel(){
         try{
-            $this->model = \Mage::getModel('Model\Admin');
+            $this->model = \Mage::getModel('Model\Brand');
             return $this;
         }catch (Exception $e){
             echo $e->getMessage();
@@ -33,7 +33,7 @@ class Brand extends \Controller\Core\Admin {
 
     public function gridAction(){
         try {
-            $grid = \Mage::getBlock('Block\Admin\Admin\Grid')->toHtml();
+            $grid = \Mage::getBlock('Block\Admin\Brand\Grid')->toHtml();
             $response = [
                 'element' => [
                     [
@@ -51,7 +51,7 @@ class Brand extends \Controller\Core\Admin {
 
     public function formAction(){
         try{    
-            $form = \Mage::getBlock('Block\Admin\Admin\Edit')->toHtml();
+            $form = \Mage::getBlock('Block\Admin\Brand\Edit')->toHtml();
             $response = [
                 'element' =>
                     [
@@ -73,19 +73,19 @@ class Brand extends \Controller\Core\Admin {
             if(!$this->getRequest()->isPost()){
                 throw new Exception("Invalid request");
             }
-            $admins =  $this->getRequest()->getPost('admin');
+            $brand =  $this->getRequest()->getPost('brand');
             $id =  $this->getRequest()->getGet('id');
             if($id){
-                $this->getModel()->adminId = $id;
+                $this->getModel()->brandId = $id;
                 $this->getMessage()->setSuccess('Record updated successfully');
             } else {
                 $this->getModel()->createdDate = date('Y-m-d');
                 $this->getMessage()->setSuccess('Record inserted successfully');
             }
-            $this->getModel()->setData($admins); 
+            $this->getModel()->setData($brand); 
             $this->getModel()->save();
 
-            $grid = \Mage::getBlock('Block\Admin\Admin\Grid')->toHtml();
+            $grid = \Mage::getBlock('Block\Admin\Brand\Grid')->toHtml();
             $response = [
                 'element' => [
                     [
@@ -114,7 +114,7 @@ class Brand extends \Controller\Core\Admin {
                 $this->getMessage()->setSuccess('Record deleted successfully!!!');
             }
             
-            $grid = \Mage::getBlock('Block\Admin\Admin\Grid')->toHtml();
+            $grid = \Mage::getBlock('Block\Admin\Brand\Grid')->toHtml();
             $response = [
                 'element' => [
                     [
