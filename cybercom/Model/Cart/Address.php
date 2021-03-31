@@ -25,7 +25,7 @@ class Address extends \Model\Core\Table{
 		return $this->cart;
 	}
 
-	public function setAddress(\Model\CustomerAddress $address){
+	/*public function setAddress(\Model\CustomerAddress $address){
 		$this->address = $address;
 		return $this;
 	}
@@ -37,5 +37,5 @@ class Address extends \Model\Core\Table{
 		$address = \Mage::getModel('Model\CustomerAddress')->load($this->addressId);
 		$this->setAddress($address);
 		return $this->address;
-	}
+	}*/
 }?>

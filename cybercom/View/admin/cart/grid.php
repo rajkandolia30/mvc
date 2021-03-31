@@ -1,27 +1,30 @@
-<?php $cart = $this->getCart(); ?>
+<?php $cart = $this->getCart();?>
 <?php $cartItem = $cart->getItems()->data;?>
-<?php $customers = $this->getCustomer()->getData(); ?>
+<?php $customers = $this->getCustomer()->getData();?>
+<?php //$billingAddress = $cart->getBillingAddress();?>
+<?php //$shippingAddress = $cart->getShippingAddress(); ?>
+<?php $billing = $this->getBillingAddress(); ?>
+<?php $shipping = $this->getShippingAddress(); ?>
+<form action="" method="post" id="cartForm">
 
-<form action="<?php echo $this->getUrl()->getUrl('update','Admin\Cart') ?>" method="post" id="cartForm">
 	<!-- select customer -->
 	<div style="padding:10px;">
 		Customer:
 		<select name="customer">
 			<?php if($customers): ?>
 				<option>SELECT CUSTOMER</option>
-				<?php foreach($customers as $key => $customer): ?>
-					<option value="<?php echo $customer->customerId; ?>" <?php if($customer->customerId && $cart->cartId){echo "selected";} ?>><?php echo $customer->firstName; ?></option>
+				<?php foreach($customers as $key => $customer):?>
+					<option value="<?php echo $customer->customerId; ?>" <?php if($cart->customerId == $customer->customerId){echo "selected";} ?>><?php echo $customer->firstName; ?></option>
 				<?php endforeach; ?>
 			<?php endif; ?>
 		</select>
-		<!-- <button type="button" class="btn btn-primary" onclick="object.setUrl('<?php //echo $this->getUrl()->getUrl('selectCustomer','Admin\Cart'); ?>').resetParams().setForm('#cartForm').load()">Go</button> -->
-		<button type="button" class="btn btn-primary" onclick="selectCustomer();">GO</button>
+		<button type="button" class="btn btn-primary" onclick="object.setForm('#cartForm').setUrl('<?php echo $this->getUrl()->getUrl('selectCustomer'); ?>').load()">Go</button>
 	</div>
 
 	<!-- Buttons -->
 	<div style="padding:10px;">
 		<button type="button" onclick="object.setUrl('<?php echo $this->getUrl()->getUrl('grid','Admin\Product') ?>').resetParams().load()" class="btn btn-dark">Back to Items</button>
-		<button type="button" onclick="object.setForm('#cartForm').load()" class="btn btn-success">Update</button>
+		<button type="button" onclick="object.setForm('#cartForm').setUrl('<?php echo $this->getUrl()->getUrl('update','Admin\Cart') ?>').load()" class="btn btn-success">Update</button>
 	</div>
 
 	<!-- cart table -->
@@ -66,32 +69,32 @@
 
 				<tr>
 					<td>Address</td>
-					<td><input type="text"></td>
+					<td><input type="text" name="billing[address]" value="<?php echo $billing->address ?>"></td>
 				</tr>
 
 				<tr>
 					<td>City</td>
-					<td><input type="text"></td>
+					<td><input type="text" name="billing[city]" value="<?php echo $billing->city ?>"></td>
 				</tr>
 
 				<tr>
 					<td>State</td>
-					<td><input type="text"></td>
+					<td><input type="text" name="billing[state]" value="<?php echo $billing->state ?>"></td>
 				</tr>
 
 				<tr>
 					<td>Zipcode</td>
-					<td><input type="number"></td>
+					<td><input type="number" name="billing[zipcode]" value="<?php echo $billing->zipcode ?>"></td>
 				</tr>
 
 				<tr>
 					<td>Country</td>
-					<td><input type="text"></td>
+					<td><input type="text" name="billing[country]" value="<?php echo $billing->country ?>"></td>
 				</tr>
 
 				<tr>
 					<td><input type="checkbox" name="saveInAddressBook">Save in address book</td>
-					<td><button type="button" class="btn btn-success">Save</button></td>
+					<td><button type="button" class="btn btn-success" onclick="object.setForm('#cartForm').setUrl('<?php echo $this->getUrl()->getUrl('saveAddress'); ?>').load()">Save</button></td>
 				</tr>
 			</table>
 		</div>
@@ -104,27 +107,27 @@
 
 				<tr>
 					<td>Address</td>
-					<td><input type="text"></td>
+					<td><input type="text" name="shipping[address]" value="<?php echo $shipping->address ?>"></td>
 				</tr>
 
 				<tr>
 					<td>City</td>
-					<td><input type="text"></td>
+					<td><input type="text" name="shipping[city]" value="<?php echo $shipping->city ?>"></td>
 				</tr>
 
 				<tr>
 					<td>State</td>
-					<td><input type="text"></td>
+					<td><input type="text" name="shipping[state]" value="<?php echo $shipping->state ?>"></td>
 				</tr>
 
 				<tr>
 					<td>Zipcode</td>
-					<td><input type="number"></td>
+					<td><input type="number" name="shipping[zipcode]" value="<?php echo $shipping->zipcode ?>"></td>
 				</tr>
 
 				<tr>
 					<td>Country</td>
-					<td><input type="text"></td>
+					<td><input type="text" name="shipping[country]" value="<?php echo $shipping->country ?>"></td>
 				</tr>
 
 				<tr>
@@ -191,11 +194,3 @@
 			</table>
 	</div>
 </form>
-
-<script type="text/javascript">
-	function selectCustomer(){
-		var form = document.getElementById('cartForm');
-		form.setAttribute('Action', '<?php echo $this->getUrl()->getUrl('selectCustomer','Admin\Cart'); ?>')
-		form.submit();
-	}
-</script>

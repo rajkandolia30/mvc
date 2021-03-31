@@ -145,18 +145,11 @@ class Cart extends \Controller\Core\Admin{
 	public function selectCustomerAction(){
 		$customerId = $this->getRequest()->getPost('customer');
 		$cart = $this->getCart($customerId);
+		$this->redirect('index');
+	}
 
-		$grid = \Mage::getBlock('Block\Admin\Cart\Grid');
-        $grid = $grid->setCart($cart)->toHtml();
-        $response = [
-            'element' => [
-                [
-                    'selector' => '#contentHtml',
-                    'html' => $grid
-                ]
-            ]                
-        ];
-        header("Content-type: application/json; charset=utf-8");
-        echo json_encode($response); 
+	public function saveAddressAction(){
+		$customerId = $this->getRequest()->getPost('customer');
+		// print_r($customerId);
 	}
 } ?>

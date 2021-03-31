@@ -10,9 +10,11 @@ class Table{
         $this->data = array_merge($this->data,$data);
         return $this;
     }
+
     public function getData(){
         return $this->data;
     }
+
     public function setAdapter($adapter = null){
         if(!$adapter){
             $adapter = \Mage::getBlock('Model\Core\Adapter');
@@ -20,26 +22,32 @@ class Table{
         $this->adapter = $adapter;
         return $this;
     }
+
     public function getAdapter(){
         if(!$this->adapter){
             $this->setAdapter();
         }
         return $this->adapter;
     }
+
     public function setPrimaryKey($primaryKey){
         $this->primaryKey = $primaryKey;
         return $this;
-    } 
+    }
+
     public function getPrimaryKey(){
         return $this->primaryKey;
     }
+
     public function setTableName($tableName){
         $this->tableName = $tableName;
         return $this;
     }
+
     public function getTableName(){
         return $this->tableName;
     }
+
     public function __set($key, $value){
         $this->data[$key] = $value;
         return $this;
@@ -50,6 +58,7 @@ class Table{
         }
         return $this->data[$key];
     }
+
     public function save(){
         if(!array_key_exists($this->getPrimaryKey(),$this->data)){
             $query = "INSERT INTO `{$this->getTableName()}` (`".implode('`, `', array_keys($this->data))."`)  
@@ -112,5 +121,4 @@ class Table{
         $query = "DELETE FROM `{$this->getTableName()}` WHERE `{$this->getPrimaryKey()}` = $id";
         return $this->getAdapter()->delete($query);
     }
-}
-?>
+}?>

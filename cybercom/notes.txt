@@ -1,4 +1,3 @@
-
 1.  Product table->  Brand, Collection, Color, Product Type, Type Group, Material, Style
 
 trait
@@ -68,7 +67,7 @@ model\core\table\collection
 
 
 cart Table ==
- cart Id				=>usedin cartItem table and 
+ cart Id					=>usedin cartItem table and cartaddress 
  sessionId				
  cartAddressTable
  customer Id 				=>foreignkey->customerTable
@@ -113,9 +112,6 @@ Cart Address table==
  base total in cart table
  cart hase cart discount 
  item has item discount
-
-
-
 
 
 show level logic

@@ -1,8 +1,7 @@
 <?php 
 namespace Model\Core;
 class Session{
-	protected $nameSpace = null;
-	
+	protected $nameSpace = null;	
 
 	public function __construct(){
 		$this->start();

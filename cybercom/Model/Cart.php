@@ -56,7 +56,9 @@ class Cart extends \Model\Core\Table{
 		}
 		$query = "SELECT * FROM `cartAddress` WHERE cartId = '{$this->cartId}' AND addressType = '{\\Model\\Cart\\Address::ADDRESS_TYPE_BILLING}'";
 		$billingAddress = \Mage::getModel('Model\Cart\Address')->fetchRow($query);
-		$this->setBillingAddress($billingAddress);
+		if($billingAddress){
+			$this->setBillingAddress($billingAddress);
+		}
 		return $this->billingAddress;
 	}
 
@@ -70,8 +72,10 @@ class Cart extends \Model\Core\Table{
 			return false;
 		}
 		$query = "SELECT * FROM `cartAddress` WHERE cartId = '{$this->cartId}' AND addressType = '{\\Model\\Cart\\Address::ADDRESS_TYPE_SHIPPING}'";
-		$billingAddress = \Mage::getModel('Model\Cart\Address')->fetchRow($query);
-		$this->setShippingAddress($shippingAddress);
+		$shippingAddress = \Mage::getModel('Model\Cart\Address')->fetchRow($query);
+		if($shippingAddress){
+			$this->setShippingAddress($shippingAddress);
+		}
 		return $this->shippingAddress;
 	}
 
@@ -128,7 +132,6 @@ class Cart extends \Model\Core\Table{
 		$cartItem->quantity = $quantity;
 		$cartItem->discount = $product->discount;
 		$cartItem->save();
-		//print_r($cartItem);
 		return true;
 	}
 } ?>

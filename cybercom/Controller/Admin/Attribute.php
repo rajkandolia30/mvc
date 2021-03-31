@@ -75,7 +75,7 @@ class Attribute extends \Controller\Core\Admin {
                 $this->getMessage()->setSuccess('Record inserted successfully');
             }
             $this->getModel()->setData($attribute); 
-/*            print_r($attribute);
+            /*print_r($attribute);
             die();*/
             $this->getModel()->save();
 
