@@ -1,7 +1,6 @@
 <?php 
 namespace Model;
 class Filter extends \Model\Admin\Session{
-	protected $filters = null;
 
 	public function setFilters($filters){
 		if(!$filters){

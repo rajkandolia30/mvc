@@ -85,21 +85,21 @@ class Admin extends \Controller\Core\Admin {
             }
             $this->getModel()->setData($admins); 
             $this->getModel()->save();
-
-            $grid = \Mage::getBlock('Block\Admin\Admin\Grid')->toHtml();
-            $response = [
-                'element' => [
-                    [
-                        'selector' => '#contentHtml',
-                        'html' => $grid,
-                    ]
-                ]                
-            ];
-            header("Content-type: application/json; charset=utf-8");
-            echo json_encode($response);
         }catch(Exception $e){
             $this->getMessage()->setFailure($e->getMessage());
         }
+
+        $grid = \Mage::getBlock('Block\Admin\Admin\Grid')->toHtml();
+        $response = [
+            'element' => [
+                [
+                    'selector' => '#contentHtml',
+                    'html' => $grid,
+                ]
+            ]                
+        ];
+        header("Content-type: application/json; charset=utf-8");
+        echo json_encode($response);
     }
 
     public function deleteAction(){

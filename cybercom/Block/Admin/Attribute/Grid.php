@@ -25,50 +25,44 @@ class Grid extends \Block\Admin\Grid{
  		return $this->attributes;
  	}*/
 
- 	public function setCollection($collection = null){
+ 	/*public function setCollection($collection = null){
  		if(!$collection){
  			$collection = \Mage::getModel('Model\Attribute');
  			$collection = $collection->fetchAll();
  		}
  		$this->collection = $collection;
  		return $this;
- 	}
+ 	}*/
 
     public function prepareFilter(){
         $attribute = \Mage::getModel('Model\Attribute');
-        $query = "SELECT * FROM {$attribute->getTableName()}";
-
-        $filter = \Mage::getModel('Model\Filter');
-        print_r($filter->getFilters());
-        die();
-        /*if($this->getFilter()->hasFilter()){
-            $query.= "WHERE";
+        $query = "SELECT * FROM `{$attribute->getTableName()}`";
+        if($this->getFilter()->hasFilter()){
+            $query.= "WHERE 1 = 1";
             foreach ($this->getFilter()->getFilters() as $type => $filters) {
                 if($type == 'varchar'){
                     foreach ($filters as $key => $value) {
-                        $query.="`{$key}` LIKE '%{$value}%' && ";
+                        $query.=" AND (`{$key}` LIKE '%{$value}%')";
                     }
                 }
                 if($type == 'number'){
                     foreach ($filters as $key => $value) {
-                        $query.="`{$key}` LIKE '%{$value}%' && ";
+                        $query.=" AND (`{$key}` LIKE '%{$value}%')";
                     }
                 }
             }
-            $query = substr($query,0,-4); 
-        }*/
-        echo $query;
+        }   
         $attribute = $attribute->fetchAll($query);
         $this->setCollection($attribute);
         return $this;
     }
 
- 	public function getCollection(){
+ 	/*public function getCollection(){
  		if(!$this->collection){
  			$this->setCollection();
  		}
  		return $this->collection;        
- 	}
+ 	}*/
 
     public function getFilter(){
         if(!$this->filter){

@@ -26,7 +26,9 @@ class Cart extends \Model\Core\Table{
 			return false;
 		}
 		$customer = \Mage::getModel('Model\Customer')->load($this->customerId);
-		$this->setCustomer($customer);
+		if($customer){
+			$this->setCustomer($customer);
+		}
 		return $this->customer;
 	}
 
@@ -54,7 +56,7 @@ class Cart extends \Model\Core\Table{
 		if(!$this->cartId){
 			return false;
 		}
-		$query = "SELECT * FROM `cartAddress` WHERE cartId = '{$this->cartId}' AND addressType = '{\\Model\\Cart\\Address::ADDRESS_TYPE_BILLING}'";
+		$query = "SELECT * FROM `cartAddress` WHERE cartId = '{$this->cartId}' AND addressType = 'billing'";
 		$billingAddress = \Mage::getModel('Model\Cart\Address')->fetchRow($query);
 		if($billingAddress){
 			$this->setBillingAddress($billingAddress);
@@ -71,7 +73,7 @@ class Cart extends \Model\Core\Table{
 		if(!$this->cartId){
 			return false;
 		}
-		$query = "SELECT * FROM `cartAddress` WHERE cartId = '{$this->cartId}' AND addressType = '{\\Model\\Cart\\Address::ADDRESS_TYPE_SHIPPING}'";
+		$query = "SELECT * FROM `cartAddress` WHERE cartId = '{$this->cartId}' AND addressType = 'shipping'";
 		$shippingAddress = \Mage::getModel('Model\Cart\Address')->fetchRow($query);
 		if($shippingAddress){
 			$this->setShippingAddress($shippingAddress);
@@ -79,7 +81,7 @@ class Cart extends \Model\Core\Table{
 		return $this->shippingAddress;
 	}
 
-	public function setPayment(\Model\Payment $payment){
+	public function setPayment(\Model\Cart $payment){
 		$this->payment = $payment;
 		return $this;
 	}
@@ -88,15 +90,15 @@ class Cart extends \Model\Core\Table{
 		if($this->payment){
 			return $this->payment;
 		}
-		if(!$this->methodId){
+		if(!$this->cartId){
 			return false;
 		}
-		$payment = \Mage::getModel('Model\Payment')->load($this->methodId);
+		$payment = \Mage::getModel('Model\Cart')->load($this->cartId);
 		$this->setPayment($payment);
 		return $this->payment;
 	}
 
-	public function setShipping(\Model\Shipping $shipping){
+	public function setShipping(\Model\Cart $shipping){
 		$this->shipping = $shipping;
 		return $this;
 	}
@@ -105,10 +107,10 @@ class Cart extends \Model\Core\Table{
 		if($this->shipping){
 			return $this->shipping;
 		}
-		if(!$this->methodId){
+		if(!$this->cartId){
 			return false;
 		}
-		$shipping = \Mage::getModel('Model\Shipping')->load($this->methodId);
+		$shipping = \Mage::getModel('Model\Cart')->load($this->cartId);
 		$this->setShipping($shipping);
 		return $this->shipping;
 	}

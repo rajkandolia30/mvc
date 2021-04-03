@@ -13,7 +13,12 @@ class Grid extends \Block\Core\Template{
  		$this->prepareColumns();
  		$this->prepareActions();
  		$this->prepareButtons();
+    $this->prepareFilter();
  	}
+
+  public function prepareFilter(){
+    return $this;
+  }
 
  	public function setCollection($collection){
  		$this->collection = $collection;
@@ -22,7 +27,7 @@ class Grid extends \Block\Core\Template{
 
  	public function getCollection(){
  		if(!$this->collection){
- 			$this->setCollection();
+ 			$this->prepareFilter();
  		}
  		return $this->collection;
  	}

@@ -66,17 +66,6 @@ set get attribute in attibute model and also getoptions
 model\core\table\collection
 
 
-cart Table ==
- cart Id					=>usedin cartItem table and cartaddress 
- sessionId				
- cartAddressTable
- customer Id 				=>foreignkey->customerTable
- Total
- discount
- payment Method Id 			=>foreignkey->paymentTable
- shipping Method Id 		=>foreignKey->shippingTable
- shippingAmount
- created Date
  
 cart Item table== 
  cartitem Id	
@@ -159,3 +148,33 @@ if flag in address book for shipping
 		create customer shipping address bases on cart shipping address
 	endif
 endif
+
+order place
+cartaddrsss
+cartItems
+custmerIndfomration name email no. 
+
+
+orderplace
+print....
+orderplace 4 
+pending
+cancle
+complete
+on road
+
+
+cart Table ==
+ cart Id					=>usedin cartItem table and cartaddress 
+ sessionId				
+ cartAddressTable
+ customer Id 				=>foreignkey->customerTable
+ Total
+ discount
+ payment Method Id 			=>foreignkey->paymentTable
+ shipping Method Id 		=>foreignKey->shippingTable
+ shippingAmount
+ created Date
+
+ 
+

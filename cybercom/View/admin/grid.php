@@ -6,8 +6,6 @@ $actions = $this->getAction();
 $button = $this->getButton();
 $title = $this->getTitle();
 //$filter = $this->prepareFilter();
-//echo '<pre>';
-//print_r($filter);
 ?>
 <div>
     <h2><?php echo $title; ?></h2>
@@ -30,7 +28,7 @@ $title = $this->getTitle();
             <?php if($columns): ?>
                 <?php foreach($columns as $key => $column): ?>
                     <td>
-                        <input type="text" name="filter[<?php echo $column['type'];?>][<?php echo $column['field'] ?>]" value="<?php // $this->getFilter()->getFilterValue($column['type'],$column['field']); ?>">
+                        <input type="text" name="filter[<?php echo $column['type'];?>][<?php echo $column['field'] ?>]" value="<?php //echo $this->getFilter()->getFilterValue($column['type'],$column['field']); ?>">
                     </td>
                 <?php endforeach; ?>
             <?php endif; ?>

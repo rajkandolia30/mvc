@@ -4,6 +4,7 @@ class Table{
     protected $adapter = null;
     protected $primaryKey = null;
     protected $tableName = null;
+    protected $orignalData = [];
     protected $data = [];
     
     public function setData(array $data){
@@ -13,6 +14,20 @@ class Table{
 
     public function getData(){
         return $this->data;
+    }
+
+    public function setOrignalData($orignalData){
+        $this->orignalData = $orignalData;
+        return $this;
+    }
+
+    public function getOrignalData(){
+        return $this->orignalData;  
+    }
+
+    public function resetData(){
+        $this->data = [];
+        return $this;
     }
 
     public function setAdapter($adapter = null){
@@ -53,31 +68,41 @@ class Table{
         return $this;
     }
     public function __get($key){
-        if(!array_key_exists($key, $this->data)){
-            return null;
+        if(array_key_exists($key, $this->data)){
+            return $this->data[$key];    
         }
-        return $this->data[$key];
+        if(array_key_exists($key, $this->orignalData)){
+            return $this->orignalData[$key];
+        }
+        return null;        
     }
 
     public function save(){
-        if(!array_key_exists($this->getPrimaryKey(),$this->data)){
+        $id = (int)$this->{$this->getPrimaryKey()};
+        if(array_key_exists($this->getPrimaryKey(), $this->data)){
+            unset($this->data[$this->getPrimaryKey()]);
+        }
+        if(!$this->data){
+            return false;
+        }
+        if(!$id){
             $query = "INSERT INTO `{$this->getTableName()}` (`".implode('`, `', array_keys($this->data))."`)  
             VALUES ('".implode('\',\'', array_values($this->data))."');";
             $returnId = $this->getAdapter()->insert($query);
-            return $returnId;
+            $this->load($returnId);
+            return $this;
         }
         $param = null;
         foreach ($this->data as $key => $value) {
-				if($key != $this->getPrimaryKey()) {
-					$param.= "`{$key}` = '{$value}',";
-				}
-			}
+                if($key != $this->getPrimaryKey()) {
+                    $param.= "`{$key}` = '{$value}',";
+                }
+            }
         $param = rtrim($param,",");
         $query = "UPDATE `{$this->getTableName()}` SET {$param} 
-        WHERE {$this->getPrimaryKey()}={$this->data[$this->getPrimaryKey()]}";
+        WHERE {$this->getPrimaryKey()}={$id}";
         $this->getAdapter()->update($query);
         return true;
-
     }
 
     public function fetchAll($query = null){
@@ -89,7 +114,7 @@ class Table{
         if($rows){
             foreach($rows as $key => $value){
                 $table = new $this;
-                $table->setData($value);
+                $table->setOrignalData($value);
                 $array[] = $table;          
             }            
         }
@@ -102,16 +127,25 @@ class Table{
     public function load($value){
         $value = (int)$value;
         $query = "SELECT * FROM `{$this->getTableName()}` WHERE `{$this->getPrimaryKey()}` = {$value}";
-        $this->fetchRow($query);
-        return $this;    
-    }
-
-    public function fetchRow($query){
         $row = $this->getAdapter()->fetchRow($query);
         if(!$row){
             return false;
         }
-        $this->data = $row;
+        $this->setOrignalData($row);
+        $this->resetData();
+        return $this;    
+    }
+
+    public function fetchRow($query){
+        if(!$query){
+            $query = "SELECT * FROM `{$this->getTableName}` WHERE `{$this->getPrimaryKey()}`";
+        }
+        $row = $this->getAdapter()->fetchRow($query);
+        if(!$row){
+            return false;
+        }
+        $this->setOrignalData($row);
+        $this->resetData();
         return $this;
     }
 

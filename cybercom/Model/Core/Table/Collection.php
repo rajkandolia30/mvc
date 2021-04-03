@@ -6,6 +6,7 @@ namespace Model\Core\Table;
  	public function __construct(){
  		
  	}
+ 	
  	public function setData($data = []){
  		$this->data = $data;
  		return $this;
