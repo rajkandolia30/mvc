@@ -52,8 +52,7 @@ class Session{
 		if(!$_SESSION[$this->getNameSpace()]){
 			return null;
 		}
-		if(array_key_exists($key, $_SESSION[$this->getNameSpace()]))
-		{	
+		if(array_key_exists($key, $_SESSION[$this->getNameSpace()])){	
 
 			return $_SESSION[$this->getNameSpace()][$key];
 		}	

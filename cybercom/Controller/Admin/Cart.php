@@ -29,12 +29,15 @@ class Cart extends \Controller\Core\Admin{
 				throw new \Exception("No Product found");			
 			}
 			$cart = $this->getCart();
+			print_r($cart);
 			$cart->addItemToCart($product, 1, true);	
-			$this->getMessage()->setSuccess('Item inserted Successfully');		
+			$this->getMessage()->setSuccess('Item inserted Successfully');	
+
+			$this->redirect('index');	
 		} catch (Exception $e) {
 			$this->getMessage()->setFailure($e->getMessage());
 		}
-		$grid = \Mage::getBlock('Block\Admin\Cart\Grid');
+		/*$grid = \Mage::getBlock('Block\Admin\Cart\Grid');
 		$grid = $grid->setCart($this->getCart())->toHtml();
             $response = [
                 'element' => [
@@ -45,11 +48,12 @@ class Cart extends \Controller\Core\Admin{
                 ]                
             ];
         header("Content-type: application/json; charset=utf-8");
-        echo json_encode($response);
+        echo json_encode($response);*/
 	}
 
 	public function getCart($customerId = null){
 		try {
+			
 			$session = \Mage::getModel('Model\Admin\Session');
 			if($customerId){
 				$session->customerId = $customerId;
@@ -65,6 +69,8 @@ class Cart extends \Controller\Core\Admin{
 			$cart->createdDate = date('y-m-d H:i:s');
 			$cart->save();
 			return $cart;
+
+
 			/*$sessionId = \Mage::getModel('Model\Admin\Session')->getId();
 			$cart = \Mage::getModel('Model\Cart');
 			$query = "SELECT * FROM `{$cart->getTableName()}` WHERE sessionId = '{$sessionId}'";
@@ -102,7 +108,6 @@ class Cart extends \Controller\Core\Admin{
 			$cart = $this->getCart();
 			foreach ($quantities as $cartItemId => $quantity) {
 				if($quantity == 0){
-					print_r($cartItemId);
 					echo $query = "DELETE FROM `cartItem` WHERE `cartItemId` = '{$cartItemId}'";
 					$delete = \Mage::getModel('Model\Cart\Item')->getAdapter()->delete($query);
 					$this->redirect('index');
@@ -113,7 +118,6 @@ class Cart extends \Controller\Core\Admin{
 				$cartItem->quantity = $quantity;
 				$cartItem->save();
 			}
-			die();
 			$this->getMessage()->setSuccess('Record Updated successfully!!!');			
 		} catch (Exception $e) {
 			$this->getMessage()->setSuccess('Record deleted successfully!!!');
@@ -153,151 +157,202 @@ class Cart extends \Controller\Core\Admin{
 
 	public function selectCustomerAction(){
 		$customerId = $this->getRequest()->getPost('customer');
-		$cart = $this->getCart($customerId);
+		$this->getCart($customerId);
 		$this->redirect('index');
 	}
 
 	public function saveBillingAddressAction(){
 		$customerId = $this->getRequest()->getPost('customer');
-		$addressId = $this->getrequest()->getGet('addressId');
 		$cartId = $this->getrequest()->getGet('cartId');
 		$billing = $this->getRequest()->getPost('billing');	
-		$billingCartAddressId = $this->getRequest()->getGet('billingCartAddressId');
+		$billingCartAddressId = $this->getCart()->getBillingAddress()->cartAddressId;
+		$addressId = $this->getCart()->getCustomer()->getBillingAddress()->addressId;
+		$customerAddress = \Mage::getModel('Model\CustomerAddress');
 		$cartAddress = \Mage::getModel('Model\Cart\Address');
-		if($billingCartAddressId){
-			if($billing['saveInAddressBook']){
-				//insert customer address
-				echo 'insert in customer address';
-				$customerAddress = \Mage::getModel('Model\CustomerAddress');
-				$customerAddress->customerId = $customerId;
-				$customerAddress->addressType = 'billing';
-				unset($billing['saveInAddressBook']);
-				$customerAddress->setData($billing);
-				$customerAddress->save();
-
-				//update customer address
-				echo 'update customer address';	
-				$query = "SELECT * 
-				FROM `{$customerAddress->getTableName()}` 
-				WHERE `customerId` = '{$customerId}'
-				AND `addressType` = 'billing'";
-				$row = $customerAddress->fetchRow($query);
-				if($addressId){
-					$customerAddress->addressId = $addressId;
-					$customerAddress->customerId = $customerId;
-					$customerAddress->addressType = 'billing';
-					unset($billing['saveInAddressBook']);
-					$customerAddress->setData($billing);
-					print_r($customerAddress);
-					$customerAddress->save();
-				}
+		
+			if($billingCartAddressId){
+				foreach ($billing as $key => $value) {
+						if($key == 'saveInAddressBook'){						
+							$query = "SELECT * 
+							FROM `{$customerAddress->getTableName()}` 
+							WHERE `customerId` = '{$customerId}'
+							AND `addressType` = 'billing'";
+							$row = $customerAddress->fetchRow($query);
+								if($addressId){
+									echo 'update customer address';	
+									$customerAddress->addressId = $addressId;
+								} else {
+								echo 'insert in customer address';
+								}
+							$customerAddress->customerId = $customerId;
+							$customerAddress->addressType = 'billing';
+							unset($billing['saveInAddressBook']);
+							$customerAddress->setData($billing);
+							//print_r($customerAddress);
+							$customerAddress->save();					
+						}
+					}
+				echo 'updating cart address';
+				$cartAddress->cartAddressId = $billingCartAddressId;
+			} else {
+					foreach ($billing as $key => $value) {
+						if($key == 'saveInAddressBook'){						
+							$query = "SELECT * 
+							FROM `{$customerAddress->getTableName()}` 
+							WHERE `customerId` = '{$customerId}'
+							AND `addressType` = 'billing'";
+							$row = $customerAddress->fetchRow($query);
+								if($addressId){
+									echo 'update customer address';	
+									$customerAddress->addressId = $addressId;
+								} else {
+									echo 'insert in customer address';					
+								}
+							$customerAddress->customerId = $customerId;
+							$customerAddress->addressType = 'billing';
+							unset($billing['saveInAddressBook']);
+							$customerAddress->setData($billing);
+							//print_r($customerAddress);
+							$customerAddress->save();
+						}
+					}	
 			}
-			//update cart address
-			echo 'updating cart address';
-			unset($billing['saveInAddressBook']);
-			$cartAddress->cartAddressId = $billingCartAddressId;
-			$cartAddress->cartId = $cartId;
-			$cartAddress->addressId = $addressId;
-			$cartAddress->addressType = 'billing';
-			$cartAddress->setData($billing);
-			$cartAddress->save();
-		} else {
-			//insert Cart address
-			echo 'inserting cart address';
-			print_r($addressId);
-			$cartAddress->cartId = $cartId;
-			$cartAddress->addressId = $addressId;
-			$cartAddress->addressType = 'billing';
-			$cartAddress->setData($billing);
-			$cartAddress->save();
-		}		
-	}
+		echo 'inserting cart address';
+		unset($billing['saveInAddressBook']);
+		$cartAddress->cartId = $cartId;
+		$cartAddress->addressId = $addressId;
+		$cartAddress->addressType = 'billing';
+		$cartAddress->setData($billing);
+		// print_r($cartAddress);
+		$cartAddress->save(); 		
+	} 
 
 	public function saveShippingAddressAction(){
 		$customerId = $this->getRequest()->getPost('customer');
-		$addressId = $this->getrequest()->getGet('addressId');
-		print_r($addressId);
 		$cartId = $this->getrequest()->getGet('cartId');
 		$shipping = $this->getRequest()->getPost('shipping');
-		$shippingCartAddressId = $this->getRequest()->getGet('shippingCartAddressId');
+		$shippingCartAddressId = $this->getCart()->getShippingAddress()->cartAddressId;
+		$addressId = $this->getCart()->getCustomer()->getShippingAddress()->addressId;
+		$customerAddress = \Mage::getModel('Model\CustomerAddress');
+		$cartAddress = \Mage::getModel('Model\Cart\Address');
 
-		$sameAsBilling = $this->getRequest()->getPost('sameAsBilling');
-		
-		if($sameAsBilling){
-			$cartAddress = $this->getCart()->getShippingAddress();
-			$cartId = $this->getCart()->cartId;
-			$billing = $this->getRequest()->getPost('billing');
-				if($cartAddress){
-					$cartAddressId = $cartAddress->cartAddressId;
-					$cartAddress = \Mage::getModel('Model\Cart\Address');
-					if($cartAddressId){
-						$cartAddress = $cartAddress->load($cartAddressId);
-						if(!$cartAddress){
-							throw new Exception("invalid");
+			if($shippingCartAddressId){				
+				foreach ($shipping as $key => $value) {
+						if($key == 'saveInAddressBook'){						
+							$query = "SELECT * 
+							FROM `{$customerAddress->getTableName()}` 
+							WHERE `customerId` = '{$customerId}'
+							AND `addressType` = 'shipping'";
+							$row = $customerAddress->fetchRow($query);
+								if($addressId){
+									echo 'update customer address';	
+									$customerAddress->addressId = $addressId;
+								} else {
+								echo 'insert in customer address';
+								}
+							$customerAddress->customerId = $customerId;
+							$customerAddress->addressType = 'shipping';
+							unset($shipping['saveInAddressBook']);
+							$customerAddress->setData($shipping);
+							//print_r($customerAddress);
+							$customerAddress->save();					
 						}
-						$cartAddress->cartAddressId = $cartAddressId;
-					} else {
-						$cartAddress->cartId = $cartId;
-						$cartAddress->addressType = 'shipping';
+						if($key == 'sameAsBilling'){
+							$cartAddress = $this->getCart()->getShippingAddress();
+							$cartId = $this->getCart()->cartId;
+							$billing = $this->getRequest()->getPost('billing');
+								if($cartAddress){
+									$cartAddressId = $cartAddress->cartAddressId;
+									$cartAddress = \Mage::getModel('Model\Cart\Address');
+									if($cartAddressId){
+										echo 'Update customer address';
+										$cartAddress = $cartAddress->load($cartAddressId);
+										if(!$cartAddress){
+											throw new Exception("invalid");
+										}
+										$cartAddress->cartAddressId = $cartAddressId;
+										$cartAddress->setData($billing);
+										//print_r($cartAddress);
+										$cartAddress->save();
+									} else {
+										echo 'insert customer Address';
+										$cartAddress->cartId = $cartId;
+										$cartAddress->addressType = 'shipping';
+										$cartAddress->setData($billing);
+										//print_r($cartAddress);
+										$cartAddress->save();
+									}					
+								}
+						}
 					}
-					$cartAddress->setData($billing);
-					$cartAddress->save();
-				}
-		}
-		if($shippingCartAddressId){
-			//update cart address
-			if($shipping['saveInAddressBook']){
-				//insert customer address	
-				echo 'insert in customer address';
-				$customerAddress = \Mage::getModel('Model\CustomerAddress');
-				$customerAddress->customerId = $customerId;
-				$customerAddress->addressType = 'shipping';
-				unset($shipping['sameAsBilling']);
-				unset($shipping['saveInAddressBook']);
-				$customerAddress->setData($shipping);
-				//print_r($customerAddress);
-				$customerAddress->save();
-
-				//update customer address
-				$query = "SELECT * 
-				FROM `{$customerAddress->getTableName()}` 
-				WHERE `customerId` = '{$customerId}'
-				AND `addressType` = 'shipping'";
-				$row = $customerAddress->fetchRow($query);
-				$addressId = $row->addressId;
-				if($addressId){
-					echo 'update in customer address';
-					$customerAddress->addressId = $addressId;
-					$customerAddress->customerId = $customerId;
-					$customerAddress->addressType = 'shipping';
-					unset($shipping['sameAsBilling']);
-					unset($shipping['saveInAddressBook']);
-					$customerAddress->setData($shipping);
-					//print_r($customerAddress);
-					$customerAddress->save();	
-				}
-
-			}
-			//insert cart address
-			echo 'update cart address';
-			unset($shipping['saveInAddressBook']);
+			echo 'updating cart address';
 			$cartAddress->cartAddressId = $shippingCartAddressId;
-			$cartAddress->cartId = $cartId;
-			$cartAddress->addressId = $addressId;
-			$cartAddress->addressType = 'shipping';
-			$cartAddress->setData($shipping);
-			print_r($cartAddress);	
-			$cartAddress->save();
-		} else {
-			//insert in cart address
-			echo 'insert cart address';
+			unset($shipping['saveInAddressBook']);
 			$cartAddress->cartId = $cartId;
 			$cartAddress->addressId = $addressId;
 			$cartAddress->addressType = 'shipping';
 			$cartAddress->setData($shipping);
 			//print_r($cartAddress);
 			$cartAddress->save();
+			} else {
+					foreach ($shipping as $key => $value) {
+						if($key == 'saveInAddressBook'){						
+							$query = "SELECT * 
+							FROM `{$customerAddress->getTableName()}` 
+							WHERE `customerId` = '{$customerId}'
+							AND `addressType` = 'shipping'";
+							$row = $customerAddress->fetchRow($query);
+								if($addressId){
+									echo 'update customer address';	
+									$customerAddress->addressId = $addressId;
+								} else {
+									echo 'insert in customer address';					
+								}
+							$customerAddress->customerId = $customerId;
+							$customerAddress->addressType = 'shipping';
+							unset($shipping['saveInAddressBook']);
+							$customerAddress->setData($shipping);
+							//print_r($customerAddress);
+							$customerAddress->save();
+						} 
+						if($key == 'sameAsBilling'){
+							$cartAddress = $this->getCart()->getShippingAddress();
+							$cartId = $this->getCart()->cartId;
+							$billing = $this->getRequest()->getPost('billing');
+								if($cartAddress){
+									$cartAddressId = $cartAddress->cartAddressId;
+									$cartAddress = \Mage::getModel('Model\Cart\Address');
+									if($cartAddressId){
+										echo 'Update customer address';
+										$cartAddress = $cartAddress->load($cartAddressId);
+										if(!$cartAddress){
+											throw new Exception("invalid");
+										}
+										$cartAddress->cartAddressId = $cartAddressId;
+										$cartAddress->setData($billing);
+										//print_r($cartAddress);
+										$cartAddress->save();
+									} else {
+										echo 'insert customer Address';
+										$cartAddress->cartId = $cartId;
+										$cartAddress->addressType = 'shipping';
+										$cartAddress->setData($billing);
+										//print_r($cartAddress);
+										$cartAddress->save();
+									}					
+								}
+						}
+					}	
+		echo 'inserting cart address';
+		unset($shipping['saveInAddressBook']);
+		$cartAddress->cartId = $cartId;
+		$cartAddress->addressId = $addressId;
+		$cartAddress->addressType = 'shipping';
+		$cartAddress->setData($shipping);
+		//print_r($cartAddress);
+		$cartAddress->save();
 		}
+				
 	}
 
 	public function paymentMethodAction(){
@@ -338,8 +393,81 @@ class Cart extends \Controller\Core\Admin{
 		if($bill){
 			$cart->cartId = $cartId;
 			$cart->total = $bill['grandTotal'];
-			print_r($cart);
 			$cart->save();
 		}
 	}
-} ?>
+
+	public function placeOrderIndexAction(){		
+		$placeOrder = \Mage::getBlock('Block\Admin\Cart\PlaceOrder')->toHtml();
+        $response = [
+            'element' => [
+                [
+                    'selector' => '#contentHtml',
+                    'html' => $placeOrder,
+                ]
+            ]                
+        ];
+        header("Content-type: application/json; charset=utf-8");
+        echo json_encode($response);
+	}
+
+	public function placeOrderAction(){
+		$customerId = $this->getRequest()->getPost('customer');
+		$cart = $this->getCart($customerId);
+		$cartId = $cart->cartId;
+
+		$placeOrder = \Mage::getModel('Model\PlaceOrder');
+		$placeOrder->customerId = $cart->customerId;
+		$placeOrder->total = $cart->total;
+		$placeOrder->discount = $cart->discount;
+		$placeOrder->paymentMethodId = $cart->paymentMethodId;
+		$placeOrder->shippingMethodId = $cart->shippingMethodId;
+		$placeOrder->shippingAmount = $cart->shippingAmount;
+		$placeOrder->createdDate = date("y-m-d H:i:s");
+		//print_r($cart);
+		//print_r($placeOrder);
+		//$placeOrder->save();
+
+		$placeOrderItem = \Mage::getModel('Model\PlaceOrder\Item');
+		$cartItem = \Mage::getModel('Model\Cart\Item');
+		$query = "SELECT * FROM `{$cartItem->getTableName()}` WHERE `cartId` = '{$cartId}' ";
+		$cartItem = $cartItem->fetchAll($query);
+		foreach ($cartItem as $key => $value) {
+			foreach ($value as $key => $value) {
+					$placeOrderItem->orderId = $value->cartId;
+					$placeOrderItem->productId = $value->productId;
+					$placeOrderItem->quantity = $value->quantity;
+					$placeOrderItem->basePrice = $value->basePrice;
+					$placeOrderItem->price = $value->price;
+					$placeOrderItem->discount = $value->discount;
+					$placeOrderItem->createdDate = date("y-m-d H:i:s");
+					echo '<pre>';
+					//print_r($value);
+					//print_r($placeOrderItem);
+					//$placeOrderItem->save();
+			}
+		}
+
+		$placeOrderAddress = \Mage::getModel('Model\PlaceOrder\Address');
+		$cartAddress = \Mage::getModel('Model\Cart\Address');
+		$query = "SELECT * FROM `{$cartItem->getTableName()}` WHERE `cartId` = '{$cartId}' ";
+		$cartAddress = $cartAddress->fetchAll($query);
+		foreach ($cartAddress as $key => $value) {
+			foreach ($value as $key => $value) {
+					$placeOrderAddress->orderId = $value->cartId;
+					$placeOrderAddress->addressId = $value->addressId;
+					$placeOrderAddress->addressType = $value->addressType;
+					$placeOrderAddress->address = $value->address;
+					$placeOrderAddress->city = $value->city;
+					$placeOrderAddress->state = $value->state;
+					$placeOrderAddress->country = $value->country;
+					$placeOrderAddress->zipcode = $value->zipcode;
+					// print_r($value);
+					// print_r($placeOrderAddress);
+					//$placeOrderAddress->save();
+			}
+		}
+		die();
+		$this->redirect('placeOrderIndex');
+	}
+} ?> 

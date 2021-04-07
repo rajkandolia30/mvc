@@ -1,8 +1,8 @@
-<?php $cart = $this->getCart();?>
-<?php $cartItem = $cart->getItems()->data;?>
+<?php $cart = $this->getCart(); ?>
+<?php $cartItem = $cart->getItems()->data; ?>
 <?php $cartShipping = $cart->getShipping(); ?>
 <?php $cartPayment = $cart->getPayment(); ?>
-<?php $customers = $this->getCustomer()->getData();?>
+<?php $customers = $this->getCustomer()->getData(); ?>
 <?php $billing = $this->getBillingAddress();?>
 <?php $shipping = $this->getShippingAddress();?>
 <?php $paymentMethod = $this->getPayment()->getData(); ?>
@@ -13,14 +13,15 @@
 	if($cart){
 		$cartId = $cart->cartId;
 	}
-	if($shipping){
-		$shippingAddressId = $shipping->addressId;
-		$shippingCartAddressId = $shipping->cartAddressId;
-	}
 	if($billing){
 		$billingAddressId = $billing->addressId;
 		$billingCartAddressId = $billing->cartAddressId; 
 	}
+	if($shipping){
+		$shippingAddressId = $shipping->addressId;
+		$shippingCartAddressId = $shipping->cartAddressId;
+	}
+
 	$base = 0;
 		foreach ($basePrice as $key => $value) {
 			if($value->cartId == $cart->cartId){
@@ -49,7 +50,8 @@
 		</select>
 		<button type="button" class="btn btn-primary" onclick="object.setForm('#cartForm').setUrl('<?php echo $this->getUrl()->getUrl('selectCustomer'); ?>').load()">Go</button>
 	</div>
-		
+
+	<hr>	
 	<!-- Buttons -->
 	<div style="padding:10px;">
 		<button type="button" onclick="object.setUrl('<?php echo $this->getUrl()->getUrl('grid','Admin\Product') ?>').resetParams().load()" class="btn btn-dark">Back to Items</button>
@@ -160,7 +162,7 @@
 				</tr>
 
 				<tr>
-					<td><input type="checkbox" name="sameAsBilling">Same as billing<br>
+					<td><input type="checkbox" name="shipping[sameAsBilling]">Same as billing<br>
 						<input type="checkbox" name="shipping[saveInAddressBook]">Save in address book
 					</td>
 					<td><button type="button" class="btn btn-success" name="shipping" onclick="object.setForm('#cartForm').setUrl('<?php echo $this->getUrl()->getUrl('saveShippingAddress',null,['addressId'=>$shippingAddressId, 'cartId'=>$cartId, 'shippingCartAddressId'=>$shippingCartAddressId]);?>').load()">Save</button></td>
@@ -217,7 +219,7 @@
 
 	<!-- final billing -->
 	<div style="margin-left: 800px">
-			<table class="table">
+			<table class="table table-bordered">
 				<tr>
 					<td>BASE TOTAL</td>
 					<td><input type="number" name="bill[base]" value="<?php echo $base; ?>"></td>
@@ -244,10 +246,12 @@
 				</tr>
 
 				<tr>
-					<td>
+					<td colspan="2">
 						<button type="button" class="btn btn-success" onclick="object.setForm('#cartForm').setUrl('<?php echo $this->getUrl()->getUrl('saveBill'); ?>').load()">Save</button>
 					</td>
 				</tr>
 			</table>
 	</div>
+
+	<button type="button" class="btn btn-primary" style="margin-left: 1100px" onclick="object.setUrl('<?php echo $this->getUrl()->getUrl('placeOrder',null,['customerId'=> $cart->customerId]); ?>').load()">Place Order</button>
 </form>
