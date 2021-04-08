@@ -15,12 +15,6 @@ class Option extends \Model\Core\Table{
  		return $row;
  	}
 
- 	public function deleteOption($ids){
- 		echo $query = "DELETE FROM `attributeoption` WHERE `optionId` NOT IN ($ids) ";
- 		$rows = $this->delete($query);
- 		//return $rows;
- 	}
-
  	public function getAttribute(){
  		if(!$this->attribute){
  			$this->setAttribute();

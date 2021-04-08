@@ -8,7 +8,7 @@
    <a href="javascript:void(0)" onclick="object.setUrl('<?php echo $this->getUrl()->getUrl('grid','Admin\customerGroup');?>').resetParams().load();">CustomerGroup</a>&nbsp;&nbsp;   
    <a href="javascript:void(0)" onclick="object.setUrl('<?php echo $this->getUrl()->getUrl('grid','Admin\payment');?>').resetParams().load();">Payment</a>&nbsp;&nbsp;
    <a href="javascript:void(0)" onclick="object.setUrl('<?php echo $this->getUrl()->getUrl('grid','Admin\product');?>').resetParams().load();">Products</a>&nbsp;&nbsp;
-   <a href="javascript:void(0)" onclick="object.setUrl('<?php echo $this->getUrl()->getUrl('grid','Admin\shipping');?>').resetParams().load();">Shipping</a>&nbsp;&nbsp;
-   <a href="javascript:void(0)" onclick="object.setUrl('<?php echo $this->getUrl()->getUrl('grid','Admin\configGroup');?>').resetParams().load();">Config </a>&nbsp;&nbsp;
    <a href="javascript:void(0)" onclick="object.setUrl('<?php echo $this->getUrl()->getUrl('grid','Admin\PlaceOrder');?>').resetParams().load();">PlaceOrder </a>&nbsp;&nbsp;
+   <a href="javascript:void(0)" onclick="object.setUrl('<?php echo $this->getUrl()->getUrl('grid','Admin\shipping');?>').resetParams().load();">Shipping</a>&nbsp;&nbsp;
+   <a href="javascript:void(0)" onclick="object.setUrl('<?php echo $this->getUrl()->getUrl('grid','Admin\Config\Group');?>').resetParams().load();">Config </a>&nbsp;&nbsp;
 </div>

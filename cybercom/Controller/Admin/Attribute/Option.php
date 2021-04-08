@@ -40,13 +40,13 @@ class Option extends \Controller\Core\Admin {
 
     public function saveAction(){
         try{
-            $model = \Mage::getModel('Model\Attribute\Option');
             $attributeId = $this->getRequest()->getGet('id');
             $existData = $this->getRequest()->getPost('exist');
             $newData = $this->getRequest()->getPost('new');
             
             if($newData){
                 foreach ($newData['name'] as $key => $value){
+                    $model = \Mage::getModel('Model\Attribute\Option');
                     $model->name = $newData['name'][$key];
                     $model->sortOrder = $newData['sortOrder'][$key];
                     $model->attributeId = $attributeId;
@@ -55,14 +55,21 @@ class Option extends \Controller\Core\Admin {
             }
 
             if($existData){
+                foreach ($existData as $key => $value) 
+                {
+                  $id[]=$key;
+                }
+                $model = \Mage::getModel('Model\Attribute\Option');
+                $id=implode(",",$id);
+                $query="DELETE FROM `{$model->getTableName()}` WHERE `{$model->getPrimaryKey()}` NOT IN ({$id}) AND `optionId`={$optionId}";
+                $model->getAdapter()->delete($query);
+
                 foreach ($existData as $key => $value){
+                    $model = \Mage::getModel('Model\Attribute\Option');
                     $model->name = $value['name'];
                     $model->sortOrder = $value['sortOrder'];
-                    // $model->deleteOption($key);
                     $model->save();
-                }   
-                /*$ids = implode(',', array_keys($existData));
-                $model->deleteOption($ids);*/
+                }  
             }
             $grid = \Mage::getBlock('Block\Admin\Attribute\Option\Edit')->toHtml();
             $response = [

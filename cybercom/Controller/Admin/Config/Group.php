@@ -43,13 +43,20 @@ class Group extends \Controller\Core\Admin{
 
 	public function formAction(){
         try{    
-            $form = \Mage::getBlock('Block\Admin\Config\Group\Edit')->toHtml();
+            $group = \Mage::getModel('Model\Config\Group');
+            $id = $this->getRequest()->getGet('id');
+            $group->load($id);
+            $edit = \Mage::getBlock('Block\Admin\Config\Group\Edit');
+            $edit->setTableRow($group);
+            $tabs = \Mage::getBlock('Block\Admin\Config\Group\Edit\Tabs');
+            $edit = $edit->toHtml();
+
             $response = [
                 'element' =>
                     [
                         [
                             'selector' => '#contentHtml',
-                            'html' => $form,                    
+                            'html' => $edit,                    
                         ]
                     ]
             ];
@@ -65,7 +72,7 @@ class Group extends \Controller\Core\Admin{
             if(!$this->getRequest()->isPost()){
                 throw new Exception("Invalid request");
             }
-            $configGroup =  $this->getRequest()->getPost('configGroup');
+            $configGroup =  $this->getRequest()->getPost('group');
             $id =  $this->getRequest()->getGet('id');
             if($id){
                 $this->getModel()->groupId = $id;

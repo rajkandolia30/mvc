@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 08, 2021 at 06:40 AM
+-- Generation Time: Apr 08, 2021 at 04:17 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.9
 
@@ -65,7 +65,8 @@ CREATE TABLE `attribute` (
 --
 
 INSERT INTO `attribute` (`attributeId`, `entityTypeId`, `name`, `code`, `inputType`, `backendType`, `sortOrder`, `backendModel`) VALUES
-(3, 'product', 'name', '3456', 'text', 'varchar', 4, NULL);
+(3, 'product', 'name', '3456', 'text', 'varchar', 4, NULL),
+(5, 'product', 'color', '123', 'text', 'vachar', 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -189,7 +190,7 @@ INSERT INTO `cartitem` (`cartItemId`, `cartId`, `productId`, `quantity`, `basePr
 (24, 1, 72, 3, 150000, 50000, 0, '0000-00-00 00:00:00.000000'),
 (25, 2, 72, 6, 300000, 50000, 0, '0000-00-00 00:00:00.000000'),
 (27, 2, 77, 1, 1000, 1000, 0, '0000-00-00 00:00:00.000000'),
-(28, 7, 72, 2, 2147483647, 50000, 0, '0000-00-00 00:00:00.000000');
+(28, 7, 72, 3, 2147483647, 50000, 0, '0000-00-00 00:00:00.000000');
 
 -- --------------------------------------------------------
 
@@ -250,11 +251,18 @@ INSERT INTO `cms` (`pageId`, `title`, `identifier`, `content`, `status`, `create
 CREATE TABLE `config` (
   `configId` int(11) NOT NULL,
   `groupId` int(11) NOT NULL,
-  `titel` varchar(20) NOT NULL,
+  `title` varchar(20) NOT NULL,
   `code` int(10) NOT NULL,
   `value` varchar(20) NOT NULL,
   `createdDate` datetime(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `config`
+--
+
+INSERT INTO `config` (`configId`, `groupId`, `title`, `code`, `value`, `createdDate`) VALUES
+(2, 1, 'website 1', 1, '1', '2021-04-08 16:02:28.000000');
 
 -- --------------------------------------------------------
 
@@ -267,6 +275,15 @@ CREATE TABLE `configgroup` (
   `name` varchar(20) NOT NULL,
   `createdDate` datetime(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `configgroup`
+--
+
+INSERT INTO `configgroup` (`groupId`, `name`, `createdDate`) VALUES
+(1, 'website', '2021-04-08 00:00:00.000000'),
+(2, 'website 1', '2021-04-08 00:00:00.000000'),
+(3, 'website 2', '2021-04-08 00:00:00.000000');
 
 -- --------------------------------------------------------
 
@@ -597,6 +614,12 @@ ALTER TABLE `cms`
   ADD PRIMARY KEY (`pageId`);
 
 --
+-- Indexes for table `config`
+--
+ALTER TABLE `config`
+  ADD PRIMARY KEY (`configId`);
+
+--
 -- Indexes for table `configgroup`
 --
 ALTER TABLE `configgroup`
@@ -685,7 +708,7 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `attribute`
 --
 ALTER TABLE `attribute`
-  MODIFY `attributeId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `attributeId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `attributeoption`
@@ -724,10 +747,16 @@ ALTER TABLE `cms`
   MODIFY `pageId` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
+-- AUTO_INCREMENT for table `config`
+--
+ALTER TABLE `config`
+  MODIFY `configId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `configgroup`
 --
 ALTER TABLE `configgroup`
-  MODIFY `groupId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `groupId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `customer`
