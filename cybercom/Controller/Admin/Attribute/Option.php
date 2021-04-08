@@ -25,17 +25,17 @@ class Option extends \Controller\Core\Admin {
 	}
     
     public function gridAction(){
-         $grid = \Mage::getBlock('Block\Admin\Attribute\Option\Edit')->toHtml();
-            $response = [
-                'element' =>[
-                    [
-                        'selector' => '#contentHtml',
-                        'html' => $grid,
-                    ]
-                ]                
-            ];
-            header("Content-type: application/json; charset=utf-8");
-            echo json_encode($response);
+        $grid = \Mage::getBlock('Block\Admin\Attribute\Option\Edit')->toHtml();
+        $response = [
+            'element' =>[
+                [
+                    'selector' => '#contentHtml',
+                    'html' => $grid,
+                ]
+            ]                
+        ];
+        header("Content-type: application/json; charset=utf-8");
+        echo json_encode($response);
     }
 
     public function saveAction(){

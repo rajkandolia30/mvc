@@ -156,3 +156,18 @@ if flag in address book for shipping
 		create customer shipping address bases on cart shipping address
 	endif
 endif
+
+table name : config_group
+
+group Id
+name
+created date
+
+table : config
+
+config Id
+group Id
+title
+code
+value
+created Date

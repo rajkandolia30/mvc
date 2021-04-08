@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 07, 2021 at 08:36 AM
+-- Generation Time: Apr 08, 2021 at 06:40 AM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.9
 
@@ -113,11 +113,11 @@ CREATE TABLE `cart` (
 
 INSERT INTO `cart` (`cartId`, `customerId`, `sessionId`, `total`, `discount`, `paymentMethodId`, `shippingMethodId`, `shippingAmount`, `createdDate`) VALUES
 (1, 1, '', 50300, 0, 3, 3, 0, '2021-04-06 06:11:22.000000'),
-(2, 2, '', 310500, 0, 1, 1, 200, '2021-04-06 06:11:49.000000'),
-(3, 3, '', 0, 0, 0, 0, 0, '2021-04-06 06:12:13.000000'),
-(4, 4, '', 0, 0, 0, 0, 0, '2021-04-06 06:12:23.000000'),
-(5, 5, '', 0, 0, 0, 0, 0, '2021-04-06 06:12:45.000000'),
-(6, 0, '', 0, 0, 0, 0, 0, '2021-04-07 06:16:32.000000');
+(2, 2, '', 341500, 0, 1, 1, 200, '2021-04-06 06:11:49.000000'),
+(3, 3, '', 51000, 0, 2, 3, 0, '2021-04-06 06:12:13.000000'),
+(4, 4, '', 955600, 0, 4, 3, 0, '2021-04-06 06:12:23.000000'),
+(5, 5, '', 50500, 0, 3, 1, 200, '2021-04-06 06:12:45.000000'),
+(7, 0, '', 0, 0, 0, 0, 0, '2021-04-08 05:38:26.000000');
 
 -- --------------------------------------------------------
 
@@ -143,9 +143,15 @@ CREATE TABLE `cartaddress` (
 
 INSERT INTO `cartaddress` (`cartAddressId`, `cartId`, `addressId`, `addressType`, `address`, `city`, `state`, `country`, `zipcode`) VALUES
 (1, 1, '1', 'billing', 'address 1', 'address 1', 'address 1', 'India', 1),
-(2, 2, '2', 'billing', 'address 2', 'address 2', 'address 2', 'India', 1),
+(2, 2, '2', 'billing', 'address ', 'address ', 'address ', 'India', 1),
 (3, 1, '3', 'shipping', 'address 1', 'address 1', 'address 1', 'India', 1),
-(5, 2, '', 'shipping', 'address 2', 'address 2', 'address 2', 'India', 1);
+(5, 2, '', 'shipping', 'address 2', 'address 2', 'address 2', 'India', 1),
+(6, 3, '', 'billing', 'rajkot', 'rajkot', 'gujrat', 'India', 12344),
+(7, 3, '', 'shipping', 'veravl', 'veravl', 'gujrat', 'India', 12345),
+(8, 4, '', 'billing', 'rajkot', 'rajkot', 'gujrat', 'India', 12344),
+(9, 4, '', 'shipping', 'veravl', 'veravl', 'GUJARAT', 'India', 12345),
+(10, 5, '', 'billing', 'rajkot', 'rajkot', 'gujrat', 'India', 12344),
+(11, 5, '', 'shipping', 'veravl', 'veral', 'GUJARAT', 'India', 12345);
 
 -- --------------------------------------------------------
 
@@ -177,13 +183,13 @@ INSERT INTO `cartitem` (`cartItemId`, `cartId`, `productId`, `quantity`, `basePr
 (18, 2, 73, 3, 240000, 80000, 0, '0000-00-00 00:00:00.000000'),
 (19, 3, 77, 1, 1000, 1000, 0, '0000-00-00 00:00:00.000000'),
 (20, 5, 74, 1, 300, 300, 0, '0000-00-00 00:00:00.000000'),
-(21, 5, 72, 1, 50000, 50000, 0, '0000-00-00 00:00:00.000000'),
+(21, 5, 72, 2, 50000, 50000, 0, '0000-00-00 00:00:00.000000'),
 (22, 1, 74, 1, 300, 300, 0, '0000-00-00 00:00:00.000000'),
-(23, 3, 72, 1, 2147483647, 50000, 0, '0000-00-00 00:00:00.000000'),
-(24, 1, 72, 1, 50000, 50000, 0, '0000-00-00 00:00:00.000000'),
-(25, 2, 72, 2, 100000, 50000, 0, '0000-00-00 00:00:00.000000'),
-(26, 6, 72, 1, 2147483647, 50000, 0, '0000-00-00 00:00:00.000000'),
-(27, 2, 77, 1, 1000, 1000, 0, '0000-00-00 00:00:00.000000');
+(23, 3, 72, 1, 50000, 50000, 0, '0000-00-00 00:00:00.000000'),
+(24, 1, 72, 3, 150000, 50000, 0, '0000-00-00 00:00:00.000000'),
+(25, 2, 72, 6, 300000, 50000, 0, '0000-00-00 00:00:00.000000'),
+(27, 2, 77, 1, 1000, 1000, 0, '0000-00-00 00:00:00.000000'),
+(28, 7, 72, 2, 2147483647, 50000, 0, '0000-00-00 00:00:00.000000');
 
 -- --------------------------------------------------------
 
@@ -238,6 +244,33 @@ INSERT INTO `cms` (`pageId`, `title`, `identifier`, `content`, `status`, `create
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `config`
+--
+
+CREATE TABLE `config` (
+  `configId` int(11) NOT NULL,
+  `groupId` int(11) NOT NULL,
+  `titel` varchar(20) NOT NULL,
+  `code` int(10) NOT NULL,
+  `value` varchar(20) NOT NULL,
+  `createdDate` datetime(6) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `configgroup`
+--
+
+CREATE TABLE `configgroup` (
+  `groupId` int(11) NOT NULL,
+  `name` varchar(20) NOT NULL,
+  `createdDate` datetime(6) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `customer`
 --
 
@@ -288,9 +321,15 @@ CREATE TABLE `customeraddress` (
 
 INSERT INTO `customeraddress` (`addressId`, `customerId`, `addressType`, `address`, `city`, `state`, `zipcode`, `country`) VALUES
 (1, 1, 'billing', 'address 1', 'address 1', 'address 1', 1, 'India'),
-(2, 2, 'billing', 'address 2', 'address 2', 'address 2', 1, 'India'),
+(2, 2, 'billing', 'address ', 'address ', 'address ', 1, 'India'),
 (3, 1, 'shipping', 'address 1', 'address 1', 'address 1', 1, 'India'),
-(5, 2, 'shipping', 'address 2', 'address 2', 'address 2', 1, 'India');
+(5, 2, 'shipping', 'address 2', 'address 2', 'address 2', 1, 'India'),
+(6, 3, 'billing', 'rajkot', 'rajkot', 'gujrat', 12344, 'India'),
+(7, 3, 'shipping', 'veravl', 'veravl', 'gujrat', 12345, 'India'),
+(8, 4, 'billing', 'rajkot', 'rajkot', 'gujrat', 12344, 'India'),
+(9, 4, 'shipping', 'veravl', 'veravl', 'GUJARAT', 12345, 'India'),
+(10, 5, 'billing', 'rajkot', 'rajkot', 'gujrat', 12344, 'India'),
+(11, 5, 'shipping', 'veravl', 'veral', 'GUJARAT', 12345, 'India');
 
 -- --------------------------------------------------------
 
@@ -357,13 +396,6 @@ CREATE TABLE `placeorder` (
   `shippingAmount` int(10) NOT NULL,
   `createdDate` datetime(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `placeorder`
---
-
-INSERT INTO `placeorder` (`orderId`, `sessionId`, `customerId`, `total`, `discount`, `paymentMethodId`, `shippingMethodId`, `shippingAmount`, `createdDate`) VALUES
-(1, 0, 2, 310500, 0, 1, 1, 200, '2021-04-07 08:16:15.000000');
 
 -- --------------------------------------------------------
 
@@ -565,6 +597,12 @@ ALTER TABLE `cms`
   ADD PRIMARY KEY (`pageId`);
 
 --
+-- Indexes for table `configgroup`
+--
+ALTER TABLE `configgroup`
+  ADD PRIMARY KEY (`groupId`);
+
+--
 -- Indexes for table `customer`
 --
 ALTER TABLE `customer`
@@ -659,19 +697,19 @@ ALTER TABLE `attributeoption`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `cartId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `cartId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `cartaddress`
 --
 ALTER TABLE `cartaddress`
-  MODIFY `cartAddressId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `cartAddressId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `cartitem`
 --
 ALTER TABLE `cartitem`
-  MODIFY `cartItemId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `cartItemId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -686,6 +724,12 @@ ALTER TABLE `cms`
   MODIFY `pageId` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
+-- AUTO_INCREMENT for table `configgroup`
+--
+ALTER TABLE `configgroup`
+  MODIFY `groupId` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
@@ -695,7 +739,7 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `customeraddress`
 --
 ALTER TABLE `customeraddress`
-  MODIFY `addressId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `addressId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `customergroup`
@@ -713,7 +757,7 @@ ALTER TABLE `payment`
 -- AUTO_INCREMENT for table `placeorder`
 --
 ALTER TABLE `placeorder`
-  MODIFY `orderId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `orderId` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `placeorderaddress`

@@ -426,35 +426,36 @@ class Cart extends \Controller\Core\Admin{
 		$placeOrder->createdDate = date("y-m-d H:i:s");
 		//print_r($cart);
 		//print_r($placeOrder);
-		//$placeOrder->save();
+		//$placeOrder = $placeOrder->save();
 
-		$placeOrderItem = \Mage::getModel('Model\PlaceOrder\Item');
+		$orderId = $placeOrder->orderId;
 		$cartItem = \Mage::getModel('Model\Cart\Item');
 		$query = "SELECT * FROM `{$cartItem->getTableName()}` WHERE `cartId` = '{$cartId}' ";
-		$cartItem = $cartItem->fetchAll($query);
-		foreach ($cartItem as $key => $value) {
-			foreach ($value as $key => $value) {
-					$placeOrderItem->orderId = $value->cartId;
-					$placeOrderItem->productId = $value->productId;
-					$placeOrderItem->quantity = $value->quantity;
-					$placeOrderItem->basePrice = $value->basePrice;
-					$placeOrderItem->price = $value->price;
-					$placeOrderItem->discount = $value->discount;
+		$cartItem = $cartItem->fetchAll($query)->getData();
+		foreach ($cartItem as $key => $item) {
+					$placeOrderItem = \Mage::getModel('Model\PlaceOrder\Item');
+					$placeOrderItem->orderId = $orderId;
+					$placeOrderItem->productId = $item->productId;
+					$placeOrderItem->quantity = $item->quantity;
+					$placeOrderItem->basePrice = $item->basePrice;
+					$placeOrderItem->price = $item->price;
+					$placeOrderItem->discount = $item->discount;
 					$placeOrderItem->createdDate = date("y-m-d H:i:s");
-					echo '<pre>';
-					//print_r($value);
+					//print_r($item);
 					//print_r($placeOrderItem);
 					//$placeOrderItem->save();
-			}
 		}
 
-		$placeOrderAddress = \Mage::getModel('Model\PlaceOrder\Address');
 		$cartAddress = \Mage::getModel('Model\Cart\Address');
-		$query = "SELECT * FROM `{$cartItem->getTableName()}` WHERE `cartId` = '{$cartId}' ";
+		$query = "SELECT * 
+		FROM `{$cartAddress->getTableName()}` 
+		WHERE `cartId` = '{$cartId}' 
+			AND `addressType`= 'shipping' ";
 		$cartAddress = $cartAddress->fetchAll($query);
-		foreach ($cartAddress as $key => $value) {
-			foreach ($value as $key => $value) {
-					$placeOrderAddress->orderId = $value->cartId;
+		foreach ($cartAddress as $key => $address) {
+			foreach ($address as $key => $value) {
+					$placeOrderAddress = \Mage::getModel('Model\PlaceOrder\Address');
+					$placeOrderAddress->orderId = $orderId;
 					$placeOrderAddress->addressId = $value->addressId;
 					$placeOrderAddress->addressType = $value->addressType;
 					$placeOrderAddress->address = $value->address;
@@ -467,6 +468,12 @@ class Cart extends \Controller\Core\Admin{
 					//$placeOrderAddress->save();
 			}
 		}
+
+		/*$cart = \Mage::getModel('Model\Cart');
+		$delete = $cart->delete($cartId);
+		if(!$delete){
+			return false;
+		}*/
 		die();
 		$this->redirect('placeOrderIndex');
 	}

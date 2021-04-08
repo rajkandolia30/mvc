@@ -38,17 +38,35 @@
 			</tr>
 		<?php endforeach; ?>
 	<?php endif; ?>
-
+	
 	<?php if($placeOrderAddress): ?>
 		<?php foreach($placeOrderAddress as $key => $value): ?>
 			<tr>
-				<td>Address</td>
-				<td><?php echo '<pre>';
-				print_r($value); ?></td>
+				<?php if($value->addressType == "billing"):?>
+					<td>Billing Address</td>
+					<td>
+						<ul style="list-style-type: none;">
+							<li><?php echo $value->address ?></li>
+							<li><?php echo $value->state ?></li>
+							<li><?php echo $value->country ?></li>
+							<li><?php echo $value->zipcode ?></li>
+						</ul>
+					</td>
+				<?php endif; ?>
+				<?php if($value->addressType == "shipping"):?>
+					<td>Shipping Address</td>
+					<td>
+						<ul style="list-style-type: none;">
+							<li><?php echo $value->address ?></li>
+							<li><?php echo $value->state ?></li>
+							<li><?php echo $value->country ?></li>
+							<li><?php echo $value->zipcode ?></li>
+						</ul>
+					</td>
+				<?php endif; ?>
 			</tr>
 		<?php endforeach; ?>
 	<?php endif; ?>
-	<?php die(); ?>
 </table> 
 
 
